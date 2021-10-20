@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -42,8 +43,8 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion '1.5.21'
+        kotlinCompilerExtensionVersion = "1.1.0-alpha06"
+        kotlinCompilerVersion '1.5.31'
     }
 
     packagingOptions {
@@ -69,6 +70,20 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 
+    // Compose Dependencies
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-rc01"
+    implementation "androidx.navigation:navigation-compose:2.4.0-alpha10"
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    implementation "com.google.accompanist:accompanist-flowlayout:0.19.0"
+
+    // Scalable Size Units
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
+    implementation 'com.intuit.ssp:ssp-android:1.0.6'
+
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
+
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
@@ -77,13 +92,13 @@ dependencies {
     implementation "io.insert-koin:koin-core:$koinVersion"
     implementation "io.insert-koin:koin-android:$koinVersion"
 
-    // Scarlet - For web sockets integration
+    // Scarlet - For Web Sockets Integration
     implementation "com.tinder.scarlet:scarlet:$scarletVersion"
     implementation "com.tinder.scarlet:websocket-okhttp:$scarletVersion"
     implementation "com.tinder.scarlet:message-adapter-moshi:$scarletVersion"
     implementation "com.tinder.scarlet:lifecycle-android:$scarletVersion"
 
-    // SQL Delight
-    implementation "com.squareup.sqldelight:android-driver:$sqlDelightVersion"
-    implementation "com.squareup.sqldelight:coroutines-extensions-jvm:$sqlDelightCoroutinesExtensionVersion"
+    // Moshi
+    implementation "com.squareup.moshi:moshi:1.12.0"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.12.0"
 }

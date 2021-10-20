@@ -1,4 +1,4 @@
-package com.mystikcoder
+package com.vaibhav
 
 import org.junit.Test
 

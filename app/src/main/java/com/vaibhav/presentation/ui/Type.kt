@@ -1,4 +1,4 @@
-package com.mystikcoder.ui.theme
+package com.vaibhav.presentation.ui
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
