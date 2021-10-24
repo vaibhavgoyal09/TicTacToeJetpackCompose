@@ -9,7 +9,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.mystikcoder"
+        applicationId "com.vaibhav"
         minSdk 21
         targetSdk 31
         versionCode 1
@@ -44,7 +44,6 @@ android {
 
     composeOptions {
         kotlinCompilerExtensionVersion = "1.1.0-alpha06"
-        kotlinCompilerVersion '1.5.31'
     }
 
     packagingOptions {
@@ -91,12 +90,19 @@ dependencies {
     // Koin
     implementation "io.insert-koin:koin-core:$koinVersion"
     implementation "io.insert-koin:koin-android:$koinVersion"
+    implementation "io.insert-koin:koin-androidx-compose:$koinVersion"
 
     // Scarlet - For Web Sockets Integration
     implementation "com.tinder.scarlet:scarlet:$scarletVersion"
     implementation "com.tinder.scarlet:websocket-okhttp:$scarletVersion"
     implementation "com.tinder.scarlet:message-adapter-moshi:$scarletVersion"
     implementation "com.tinder.scarlet:lifecycle-android:$scarletVersion"
+
+    // Retrofit and OkHttp3
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.2'
+    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
 
     // Moshi
     implementation "com.squareup.moshi:moshi:1.12.0"
