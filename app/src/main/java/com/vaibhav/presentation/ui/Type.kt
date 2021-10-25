@@ -8,37 +8,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.vaibhav.R
 
-val poppinsFont = FontFamily(
+val customFonts = FontFamily(
     Font(R.font.poppins_light, weight = FontWeight.Light),
     Font(R.font.poppins_medium, weight = FontWeight.Medium),
-    Font(R.font.poppins_regular, weight = FontWeight.Normal),
-    Font(R.font.poppins_semi_bold, weight = FontWeight.SemiBold),
-    Font(R.font.poppins_bold, weight = FontWeight.Bold)
+    Font(R.font.balsamiq_sans_bold, weight = FontWeight.SemiBold),
+    Font(R.font.balsamiq_sans_regular, weight = FontWeight.Normal),
+    Font(R.font.acme_regular, weight = FontWeight.Bold)
 )
 
 val Typography = Typography(
     h1 = TextStyle(
-        fontFamily = poppinsFont,
+        fontFamily = customFonts,
         fontWeight = FontWeight.Bold,
-        fontSize = 18.sp
+        fontSize = 28.sp
     ),
     body1 = TextStyle(
-        fontFamily = poppinsFont,
+        fontFamily = customFonts,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp
     ),
     h2 = TextStyle(
-        fontFamily = poppinsFont,
-        fontWeight = FontWeight.Medium,
+        fontFamily = customFonts,
+        fontWeight = FontWeight.SemiBold,
         fontSize = 16.sp
     ),
     body2 = TextStyle(
-        fontFamily = poppinsFont,
+        fontFamily = customFonts,
         fontWeight = FontWeight.Light,
         fontSize = 13.sp
     ),
     h3 = TextStyle(
-        fontFamily = poppinsFont,
+        fontFamily = customFonts,
         fontWeight = FontWeight.Light,
         fontSize = 13.sp
     )
