@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Tic Tac Toe</string>
     <string name="choose_a_username">Choose a username</string>
+    <string name="error_unknown">Something Went Wrong</string>
+    <string name="password_visible_content_description">Password is Visible</string>
+    <string name="password_hidden_content_description">Password is Hidden</string>
+    <string name="username">Username</string>
 </resources>

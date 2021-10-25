@@ -2,6 +2,7 @@ package com.vaibhav.presentation.ui
 
 import androidx.compose.ui.graphics.Color
 
+val TextSecondary = Color(0xFFAAAAAA)
 val Black = Color(0xFF041B2D)
 val Secondary = Color(0XFFAAB6FB)
 val White = Color(0xFFEEEEEE)
