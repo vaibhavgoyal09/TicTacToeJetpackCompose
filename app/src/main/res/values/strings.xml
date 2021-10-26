@@ -5,4 +5,7 @@
     <string name="password_visible_content_description">Password is Visible</string>
     <string name="password_hidden_content_description">Password is Hidden</string>
     <string name="username">Username</string>
+    <string name="empty_username_error">User name can\'t be empty</string>
+    <string name="short_username_error">Too short</string>
+    <string name="invalid_username_error">User name contains invalid characters</string>
 </resources>
