@@ -1,6 +1,4 @@
-package com.vaibhav.presentation.username.utils
-
-import com.vaibhav.presentation.common.util.Error
+package com.vaibhav.presentation.common.util
 
 sealed class UserNameValidationErrors: Error() {
 

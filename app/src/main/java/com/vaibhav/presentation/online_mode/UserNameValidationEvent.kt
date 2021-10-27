@@ -1,4 +1,4 @@
-package com.vaibhav.presentation.username.choose_username
+package com.vaibhav.presentation.online_mode
 
 sealed class UserNameValidationEvent {
 

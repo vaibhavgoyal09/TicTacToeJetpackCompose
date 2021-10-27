@@ -1,4 +1,4 @@
-package com.vaibhav.presentation.username.enter_username
+package com.vaibhav.presentation.offline_mode
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController

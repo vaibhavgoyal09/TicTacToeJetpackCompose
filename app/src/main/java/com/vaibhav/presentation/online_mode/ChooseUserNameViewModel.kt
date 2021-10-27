@@ -1,11 +1,11 @@
-package com.vaibhav.presentation.username.choose_username
+package com.vaibhav.presentation.online_mode
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaibhav.presentation.common.util.StandardTextFieldState
-import com.vaibhav.presentation.username.utils.UserNameValidationErrors
+import com.vaibhav.presentation.common.util.UserNameValidationErrors
 import com.vaibhav.util.Constants
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow

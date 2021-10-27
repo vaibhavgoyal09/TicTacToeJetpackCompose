@@ -8,8 +8,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.vaibhav.presentation.username.choose_username.ChooseUserNameScreen
-import com.vaibhav.presentation.username.enter_username.EnterUserNameScreen
+import com.vaibhav.presentation.online_mode.ChooseUserNameScreen
+import com.vaibhav.presentation.offline_mode.EnterUserNameScreen
 import com.vaibhav.presentation.home_screen.HomeScreen
 import com.vaibhav.presentation.select_room.SelectRoomScreen
 
