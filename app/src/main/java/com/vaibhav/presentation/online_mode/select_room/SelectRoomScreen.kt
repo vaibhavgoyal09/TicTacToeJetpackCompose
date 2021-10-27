@@ -1,4 +1,4 @@
-package com.vaibhav.presentation.select_room
+package com.vaibhav.presentation.online_mode.select_room
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon

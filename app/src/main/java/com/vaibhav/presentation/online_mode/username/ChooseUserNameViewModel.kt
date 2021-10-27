@@ -1,4 +1,4 @@
-package com.vaibhav.presentation.online_mode
+package com.vaibhav.presentation.online_mode.username
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

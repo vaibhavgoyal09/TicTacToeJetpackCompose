@@ -1,4 +1,4 @@
-package com.vaibhav.presentation.offline_mode
+package com.vaibhav.presentation.offline_mode.username
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController

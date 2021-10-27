@@ -1,4 +1,4 @@
-package com.vaibhav.presentation.select_room
+package com.vaibhav.presentation.online_mode.select_room
 
 import androidx.lifecycle.ViewModel
 
