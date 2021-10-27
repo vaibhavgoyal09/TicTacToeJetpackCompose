@@ -22,9 +22,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.vaibhav.R
-import com.vaibhav.presentation.ui.IconTint
 import com.vaibhav.presentation.ui.TextSecondary
-import com.vaibhav.presentation.ui.White
 
 @Composable
 fun StandardTextField(
@@ -33,9 +31,7 @@ fun StandardTextField(
     textColor: Color = MaterialTheme.colors.onSurface,
     maxLength: Int = 400,
     error: String = "",
-    style: TextStyle = TextStyle(
-        color = MaterialTheme.colors.onSurface
-    ),
+    style: TextStyle = MaterialTheme.typography.body1,
     labelText: String? = null,
     hintText: String? = null,
     hintTextColor: Color = TextSecondary,
@@ -43,8 +39,8 @@ fun StandardTextField(
     focusedIndicatorColor: Color = MaterialTheme.colors.primary,
     unfocusedIndicatorColor: Color = MaterialTheme.colors.secondary,
     labelUnfocusedColor: Color = TextSecondary,
-    labelFocusedColor: Color = White,
-    cursorColor: Color = White,
+    labelFocusedColor: Color = MaterialTheme.colors.onBackground,
+    cursorColor: Color = MaterialTheme.colors.secondary,
     singleLine: Boolean = true,
     maxLines: Int = 1,
     leadingIcon: ImageVector? = null,
@@ -53,8 +49,8 @@ fun StandardTextField(
     isPasswordToggleDisplayed: Boolean = keyboardType == KeyboardType.Password,
     isPasswordVisible: Boolean = false,
     onPasswordToggleClick: (Boolean) -> Unit = {},
-    onValueChange: (String) -> Unit,
-    onImeAction: () -> Unit = {}
+    onImeAction: () -> Unit = {},
+    onValueChange: (String) -> Unit
 ) {
     Column(
         modifier = modifier

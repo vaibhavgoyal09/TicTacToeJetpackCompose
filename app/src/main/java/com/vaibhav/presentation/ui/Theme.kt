@@ -3,17 +3,18 @@ package com.vaibhav.presentation.ui
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 
 private val LightColorPalette = lightColors(
-    primary = MediumBlue,
-    primaryVariant = Black,
+    primary = Primary,
+    primaryVariant = Accent,
     secondary = Secondary,
-    background = DarkBlue,
-    surface = MediumBlue,
-    onPrimary = White,
-    onSecondary = Black,
-    onBackground = White,
-    onSurface = White,
+    background = Background,
+    surface = Color.White,
+    onPrimary = Color.White,
+    onSecondary = Color.Black,
+    onBackground = Color.Black,
+    onSurface = Color.Black,
 )
 
 @Composable

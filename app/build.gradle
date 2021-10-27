@@ -74,10 +74,8 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:2.4.0-alpha10"
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation "com.google.accompanist:accompanist-flowlayout:0.19.0"
-
-    // Scalable Size Units
-    implementation 'com.intuit.sdp:sdp-android:1.0.6'
-    implementation 'com.intuit.ssp:ssp-android:1.0.6'
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc01"
+    implementation "androidx.paging:paging-compose:1.0.0-alpha14"
 
     // Lifecycle
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"

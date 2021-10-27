@@ -1,4 +1,4 @@
-package com.vaibhav.presentation.enter_username
+package com.vaibhav.presentation.username.utils
 
 import com.vaibhav.presentation.common.util.Error
 

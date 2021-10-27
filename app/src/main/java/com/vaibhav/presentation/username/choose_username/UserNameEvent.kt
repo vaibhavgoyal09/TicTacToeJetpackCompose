@@ -1,4 +1,4 @@
-package com.vaibhav.presentation.enter_username
+package com.vaibhav.presentation.username.choose_username
 
 sealed class UserNameEvent {
 

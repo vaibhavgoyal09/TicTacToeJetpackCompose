@@ -8,4 +8,10 @@
     <string name="empty_username_error">User name can\'t be empty</string>
     <string name="short_username_error">Too short</string>
     <string name="invalid_username_error">User name contains invalid characters</string>
+    <string name="search_for_rooms">Search for rooms</string>
+    <string name="refresh">Refresh</string>
+    <string name="choose_play_mode">Choose your play mode</string>
+    <string name="multi_player_online">Online</string>
+    <string name="multi_player_offline">Offline</string>
+    <string name="settings_content_desc">Settings</string>
 </resources>

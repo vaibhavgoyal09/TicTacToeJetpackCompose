@@ -1,16 +1,17 @@
-package com.vaibhav.presentation.enter_username
+package com.vaibhav.presentation.username.choose_username
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaibhav.presentation.common.util.StandardTextFieldState
-import com.vaibhav.util.Constants.MIN_USERNAME_CHAR_COUNT
+import com.vaibhav.presentation.username.utils.UserNameValidationErrors
+import com.vaibhav.util.Constants
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
-class EnterUserNameViewModel : ViewModel() {
+class ChooseUserNameViewModel: ViewModel() {
 
     private val _userNameFieldState = mutableStateOf(StandardTextFieldState())
     val userNameFieldState: State<StandardTextFieldState> = _userNameFieldState
@@ -36,7 +37,7 @@ class EnterUserNameViewModel : ViewModel() {
                                 error = UserNameValidationErrors.Empty
                             )
                         }
-                        userName.length < MIN_USERNAME_CHAR_COUNT -> {
+                        userName.length < Constants.MIN_USERNAME_CHAR_COUNT -> {
                             _userNameFieldState.value = _userNameFieldState.value.copy(
                                 error = UserNameValidationErrors.TooShort
                             )
