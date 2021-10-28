@@ -9,14 +9,13 @@ import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.vaibhav.presentation.navigation.Navigation
-import com.vaibhav.presentation.ui.TicTacToeTheme
+import com.vaibhav.presentation.common.theme.TicTacToeTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             TicTacToeTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     color = MaterialTheme.colors.background,
                     modifier = Modifier.fillMaxSize()

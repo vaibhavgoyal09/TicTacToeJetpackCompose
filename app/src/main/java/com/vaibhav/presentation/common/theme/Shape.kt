@@ -1,4 +1,4 @@
-package com.vaibhav.presentation.ui
+package com.vaibhav.presentation.common.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

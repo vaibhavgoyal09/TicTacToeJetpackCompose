@@ -22,7 +22,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.vaibhav.R
-import com.vaibhav.presentation.ui.TextSecondary
+import com.vaibhav.presentation.common.theme.TextSecondary
 
 @Composable
 fun StandardTextField(

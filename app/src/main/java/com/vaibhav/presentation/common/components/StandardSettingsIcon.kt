@@ -17,7 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.vaibhav.R
-import com.vaibhav.presentation.ui.ShadowStartColor
+import com.vaibhav.presentation.common.theme.ShadowStartColor
 
 @ExperimentalMaterialApi
 @Composable

@@ -1,4 +1,4 @@
-package com.vaibhav.presentation.ui
+package com.vaibhav.presentation.common.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

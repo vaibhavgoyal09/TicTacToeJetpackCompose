@@ -16,17 +16,18 @@ class ChooseUserNameViewModel: ViewModel() {
     private val _userNameFieldState = mutableStateOf(StandardTextFieldState())
     val userNameFieldState: State<StandardTextFieldState> = _userNameFieldState
 
-    private val _userNameValidationEvent = MutableSharedFlow<UserNameValidationEvent>()
-    val userNameValidationEvent: SharedFlow<UserNameValidationEvent> = _userNameValidationEvent
+    private val _userNameValidationEvent = MutableSharedFlow<ChooseUserNameValidationEvent>()
+    val userNameValidationEvent: SharedFlow<ChooseUserNameValidationEvent> = _userNameValidationEvent
 
-    fun onEvent(event: UserNameEvent) {
-        when (event) {
-            is UserNameEvent.EnteredUserName -> {
+    fun onEvent(eventChoose: ChooseUserNameEvent) {
+        when (eventChoose) {
+            is ChooseUserNameEvent.EnteredUserName -> {
                 _userNameFieldState.value = _userNameFieldState.value.copy(
-                    text = event.userName
+                    text = eventChoose.userName,
+                    error = null
                 )
             }
-            is UserNameEvent.ValidateUserName -> {
+            is ChooseUserNameEvent.ValidateUserName -> {
                 viewModelScope.launch {
 
                     val userName = _userNameFieldState.value.text
@@ -43,7 +44,7 @@ class ChooseUserNameViewModel: ViewModel() {
                             )
                         }
                         else -> _userNameValidationEvent.emit(
-                            UserNameValidationEvent.Success(_userNameFieldState.value.text)
+                            ChooseUserNameValidationEvent.Success(_userNameFieldState.value.text)
                         )
                     }
                 }

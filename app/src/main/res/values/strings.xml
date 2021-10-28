@@ -14,4 +14,7 @@
     <string name="multi_player_online">Online</string>
     <string name="multi_player_offline">Offline</string>
     <string name="settings_content_desc">Settings</string>
+    <string name="enter_player_names">Enter player names</string>
+    <string name="player_1_name">Player 1 Name</string>
+    <string name="player_2_name">Player 2 Name</string>
 </resources>

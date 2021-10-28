@@ -1,4 +1,4 @@
-package com.vaibhav.presentation.ui
+package com.vaibhav.presentation.common.theme
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.lightColors

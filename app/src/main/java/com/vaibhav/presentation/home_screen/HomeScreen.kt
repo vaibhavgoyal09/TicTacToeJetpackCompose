@@ -15,7 +15,7 @@ import androidx.navigation.NavController
 import com.vaibhav.R
 import com.vaibhav.presentation.common.components.StandardSettingsIcon
 import com.vaibhav.presentation.navigation.Screen
-import com.vaibhav.presentation.ui.TextPrimary
+import com.vaibhav.presentation.common.theme.TextPrimary
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
