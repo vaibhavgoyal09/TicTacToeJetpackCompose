@@ -35,7 +35,6 @@ fun StandardTextField(
     labelText: String? = null,
     hintText: String? = null,
     hintTextColor: Color = TextSecondary,
-    backgroundColor: Color = MaterialTheme.colors.surface,
     focusedIndicatorColor: Color = MaterialTheme.colors.primary,
     unfocusedIndicatorColor: Color = MaterialTheme.colors.secondary,
     labelUnfocusedColor: Color = TextSecondary,
@@ -65,12 +64,12 @@ fun StandardTextField(
             },
             colors = TextFieldDefaults.textFieldColors(
                 textColor = textColor,
-                backgroundColor = backgroundColor,
                 unfocusedIndicatorColor = unfocusedIndicatorColor,
                 focusedIndicatorColor = focusedIndicatorColor,
                 unfocusedLabelColor = labelUnfocusedColor,
                 focusedLabelColor = labelFocusedColor,
-                cursorColor = cursorColor
+                cursorColor = cursorColor,
+                backgroundColor = Color.Transparent
             ),
             maxLines = maxLines,
             textStyle = style,
@@ -119,7 +118,7 @@ fun StandardTextField(
                     Icon(
                         imageVector = leadingIcon,
                         contentDescription = null,
-                        tint = MaterialTheme.colors.onBackground,
+                        tint = TextSecondary,
                         modifier = Modifier.size(25.dp)
                     )
                 }

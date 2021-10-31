@@ -9,4 +9,8 @@ sealed class Screen(val route: String) {
     object ChooseUserNameScreen: Screen("choose_user_name_screen")
 
     object SelectRoomScreen: Screen("select_room_screen")
+
+    object OnlineGameScreen: Screen("online_game_screen")
+
+    object CreateNewRoomScreen: Screen("create_new_room_screen")
 }

@@ -77,6 +77,19 @@ fun EnterUserNameScreen(
                 .align(alignment = Alignment.Center)
                 .padding(start = 16.dp, end = 16.dp)
         ) {
+
+            Image(
+                painter = painterResource(id = R.drawable.ic_normal_head),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(width = 150.dp, height = 125.dp)
+                    .align(alignment = Alignment.CenterHorizontally)
+            )
+
+            Spacer(
+                modifier = Modifier.size(20.dp)
+            )
+
             Text(
                 text = stringResource(id = R.string.enter_player_names),
                 color = MaterialTheme.colors.onBackground,

@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
@@ -74,8 +75,21 @@ fun ChooseUserNameScreen(
         Column(
             modifier = Modifier
                 .align(alignment = Alignment.Center)
-                .padding(start = 16.dp, end = 16.dp)
+                .padding(start = 16.dp, end = 16.dp, top = 40.dp, bottom = 40.dp)
         ) {
+
+            Image(
+                painter = painterResource(id = R.drawable.ic_normal_head),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(width = 150.dp, height = 125.dp)
+                    .align(alignment = CenterHorizontally)
+            )
+
+            Spacer(
+                modifier = Modifier.size(20.dp)
+            )
+
             Text(
                 text = stringResource(id = R.string.choose_a_username),
                 color = MaterialTheme.colors.onBackground,

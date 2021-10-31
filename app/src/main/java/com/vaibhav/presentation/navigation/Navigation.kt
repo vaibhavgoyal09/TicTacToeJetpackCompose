@@ -1,6 +1,7 @@
 package com.vaibhav.presentation.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -11,10 +12,15 @@ import androidx.navigation.navArgument
 import com.vaibhav.presentation.online_mode.username.ChooseUserNameScreen
 import com.vaibhav.presentation.offline_mode.username.EnterUserNameScreen
 import com.vaibhav.presentation.home_screen.HomeScreen
-import com.vaibhav.presentation.online_mode.select_room.SelectRoomScreen
+import com.vaibhav.presentation.online_mode.game.OnlineGameScreen
+import com.vaibhav.presentation.online_mode.room.create_room.CreateNewRoomScreen
+import com.vaibhav.presentation.online_mode.room.select_room.SelectRoomScreen
 
 @Composable
-fun Navigation(navController: NavHostController) {
+fun Navigation(
+    navController: NavHostController,
+    scaffoldState: ScaffoldState
+) {
     NavHost(
         navController = navController,
         startDestination = Screen.HomeScreen.route,
@@ -43,12 +49,32 @@ fun Navigation(navController: NavHostController) {
 
             SelectRoomScreen(
                 navController = navController,
-                userName = userName
+                userName = userName,
+                scaffoldState = scaffoldState
             )
         }
 
         composable(Screen.ChooseUserNameScreen.route) {
             ChooseUserNameScreen(navController = navController)
+        }
+
+        composable(Screen.CreateNewRoomScreen.route) {
+            CreateNewRoomScreen(navController = navController, scaffoldState = scaffoldState)
+        }
+
+        composable(
+            route = Screen.OnlineGameScreen.route + "/{roomName}",
+            arguments = listOf(
+                navArgument("roomName") {
+                    type = NavType.StringType
+                    nullable = false
+                }
+            )
+        ) {
+            val roomName = it.arguments?.getString("roomName").toString()
+            OnlineGameScreen(roomName = roomName, onNavigateUp = {
+                navController.popBackStack()
+            })
         }
     }
 }
