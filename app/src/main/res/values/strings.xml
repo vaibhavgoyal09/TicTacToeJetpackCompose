@@ -17,4 +17,5 @@
     <string name="enter_player_names">Enter player names</string>
     <string name="player_1_name">Player 1 Name</string>
     <string name="player_2_name">Player 2 Name</string>
+    <string name="error_loading_rooms">An error occurred while loading rooms</string>
 </resources>
