@@ -5,7 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.vaibhav.presentation.navigation.Navigation
@@ -21,7 +23,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 ) {
                     val navController = rememberNavController()
-                    Navigation(navController = navController)
+                    val scaffoldState = rememberScaffoldState()
+
+                    Scaffold(
+                        modifier = Modifier.fillMaxSize(),
+                        scaffoldState = scaffoldState
+                    ) {
+                        Navigation(navController = navController, scaffoldState = scaffoldState)
+                    }
                 }
             }
         }
