@@ -57,7 +57,9 @@ class SelectRoomViewModel(
             }
             is SelectRoomInputEvent.CreateNewRoom -> {
                 viewModelScope.launch {
-                    _selectRoomEvent.emit(SelectRoomOutputEvent.Navigate(Screen.CreateNewRoomScreen.route))
+                    _selectRoomEvent.emit(
+                        SelectRoomOutputEvent.Navigate(Screen.CreateNewRoomScreen.route + "/${inputEvent.userName}")
+                    )
                 }
             }
             is SelectRoomInputEvent.JoinRoom -> {
@@ -70,15 +72,23 @@ class SelectRoomViewModel(
         viewModelScope.launch {
             when (val result = roomsRepository.joinRoom(userName, roomName)) {
                 is ResponseResult.Success -> {
-                    _selectRoomEvent.emit(
-                        SelectRoomOutputEvent.Navigate(Screen.OnlineGameScreen.route + "/$roomName")
-                    )
+                    if (result.data!!.isSuccessful) {
+                        _selectRoomEvent.emit(
+                            SelectRoomOutputEvent.Navigate(Screen.OnlineGameScreen.route + "/$roomName")
+                        )
+                    } else {
+                        showSnackBar(result.data.message ?: "Error while joining room.")
+                    }
                 }
                 is ResponseResult.Error -> {
-                    _selectRoomEvent.emit(SelectRoomOutputEvent.ShowSnackBar(result.error!!))
+                    showSnackBar("Error while joining room.")
                 }
             }
         }
+    }
+
+    private suspend fun showSnackBar(message: String) {
+        _selectRoomEvent.emit(SelectRoomOutputEvent.ShowSnackBar(message))
     }
 
     private fun refreshRooms() {

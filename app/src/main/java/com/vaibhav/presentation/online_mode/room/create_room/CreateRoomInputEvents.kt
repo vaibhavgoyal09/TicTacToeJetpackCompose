@@ -4,5 +4,5 @@ sealed class CreateRoomInputEvents {
 
     data class EnteredRoomName(val name: String): CreateRoomInputEvents()
 
-    object CreateRoom: CreateRoomInputEvents()
+    data class CreateRoom(val userName: String): CreateRoomInputEvents()
 }

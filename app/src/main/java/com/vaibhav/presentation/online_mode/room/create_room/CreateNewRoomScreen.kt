@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -27,7 +28,8 @@ import org.koin.androidx.compose.getViewModel
 fun CreateNewRoomScreen(
     navController: NavController,
     scaffoldState: ScaffoldState,
-    viewModel: CreateRoomViewModel = getViewModel()
+    viewModel: CreateRoomViewModel = getViewModel(),
+    userName: String
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -118,8 +120,7 @@ fun CreateNewRoomScreen(
                     viewModel.onEvent(CreateRoomInputEvents.EnteredRoomName(it))
                 },
                 onImeAction = {
-                    viewModel.onEvent(CreateRoomInputEvents.CreateRoom)
-                    focusManager.clearFocus()
+                    createAndJoinRoom(userName, viewModel, focusManager)
                 },
                 textColor = MaterialTheme.colors.onSurface
             )
@@ -131,8 +132,7 @@ fun CreateNewRoomScreen(
             Button(
                 shape = RoundedCornerShape(15.dp),
                 onClick = {
-                    viewModel.onEvent(CreateRoomInputEvents.CreateRoom)
-                    focusManager.clearFocus()
+                    createAndJoinRoom(userName, viewModel, focusManager)
                 },
                 modifier = Modifier
                     .wrapContentSize()
@@ -150,4 +150,13 @@ fun CreateNewRoomScreen(
             }
         }
     }
+}
+
+private fun createAndJoinRoom(
+    userName: String,
+    viewModel: CreateRoomViewModel,
+    focusManager: FocusManager
+) {
+    viewModel.onEvent(CreateRoomInputEvents.CreateRoom(userName))
+    focusManager.clearFocus()
 }

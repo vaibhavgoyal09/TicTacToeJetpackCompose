@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 @Composable
 fun OnlineGameScreen(
     roomName: String,
+    userName: String,
     onNavigateUp: () -> Unit
 ) {
 

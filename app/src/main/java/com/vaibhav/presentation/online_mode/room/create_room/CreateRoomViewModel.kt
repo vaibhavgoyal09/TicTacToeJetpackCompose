@@ -39,39 +39,75 @@ class CreateRoomViewModel(
 
                     val roomName = _textFieldState.value.text
 
-                    when {
+                    val isValidRoomName: Boolean = when {
                         roomName.isEmpty() -> {
                             _textFieldState.value = _textFieldState.value.copy(
                                 error = RoomNameValidationErrors.Empty
                             )
+                            false
                         }
                         roomName.length < MIN_ROOM_NAME_CHAR_COUNT -> {
                             _textFieldState.value = _textFieldState.value.copy(
                                 error = RoomNameValidationErrors.Short
                             )
+                            false
                         }
                         roomName.length > MAX_ROOM_NAME_CHAR_COUNT -> {
                             _textFieldState.value = _textFieldState.value.copy(
                                 error = RoomNameValidationErrors.Long
                             )
+                            false
                         }
-                        else -> createRoom(roomName)
+                        else -> true
+                    }
+
+                    if (isValidRoomName) {
+                        val isRoomCreated = createRoom(roomName)
+
+                        if (isRoomCreated) {
+                            joinRoom(event.userName, roomName)
+                        }
                     }
                 }
             }
         }
     }
 
-    private suspend fun createRoom(roomName: String) {
+    private suspend fun createRoom(roomName: String): Boolean {
         val request = CreateRoomRequest(roomName)
 
-        when (val result = roomsRepository.createRoom(request)) {
+        return when (val result = roomsRepository.createRoom(request)) {
             is ResponseResult.Success -> {
-                _uiEvent.emit(UiEvent.Navigate(Screen.OnlineGameScreen.route + "/$roomName"))
+                if (result.data!!.isSuccessful) {
+                    true
+                } else {
+                    showSnackBar(result.data.message ?: "Error while creating room.")
+                    false
+                }
             }
             is ResponseResult.Error -> {
-                _uiEvent.emit(UiEvent.ShowSnackBar(result.error!!))
+                showSnackBar("Error while creating room.")
+                false
             }
         }
+    }
+
+    private suspend fun joinRoom(userName: String, roomName: String) {
+        when (val result = roomsRepository.joinRoom(userName, roomName)) {
+            is ResponseResult.Success -> {
+                if (result.data!!.isSuccessful) {
+                    _uiEvent.emit(UiEvent.Navigate(Screen.OnlineGameScreen.route + "/$roomName"))
+                } else {
+                    showSnackBar(result.data.message ?: "Error while joining room.")
+                }
+            }
+            is ResponseResult.Error -> {
+                showSnackBar("Error while joining room.")
+            }
+        }
+    }
+
+    private suspend fun showSnackBar(message: String) {
+        _uiEvent.emit(UiEvent.ShowSnackBar(message))
     }
 }

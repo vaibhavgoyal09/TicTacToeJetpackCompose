@@ -196,7 +196,7 @@ fun SelectRoomScreen(
 
             TextButton(
                 onClick = {
-                    viewModel.onEvent(SelectRoomInputEvent.CreateNewRoom)
+                    viewModel.onEvent(SelectRoomInputEvent.CreateNewRoom(userName))
                 }
             ) {
                 Text(

@@ -10,5 +10,5 @@ sealed class SelectRoomInputEvent {
 
     object Refresh : SelectRoomInputEvent()
 
-    object CreateNewRoom : SelectRoomInputEvent()
+    data class CreateNewRoom(val userName: String) : SelectRoomInputEvent()
 }

@@ -2,6 +2,7 @@ package com.vaibhav.core.repository.implementation
 
 import com.vaibhav.core.models.Room
 import com.vaibhav.core.models.request.CreateRoomRequest
+import com.vaibhav.core.models.response.BasicApiResponse
 import com.vaibhav.core.networking.TicTacToeHttpApi
 import com.vaibhav.core.repository.abstraction.RoomsRepository
 import com.vaibhav.core.util.safeApiCall
@@ -26,19 +27,28 @@ class RoomsRepositoryImpl(
         }
     }
 
-    override suspend fun joinRoom(userName: String, roomName: String): ResponseResult<Unit> {
+    override suspend fun joinRoom(
+        userName: String,
+        roomName: String
+    ): ResponseResult<BasicApiResponse> {
         return safeApiCall(dispatcherProvider.io) {
             val response = ticTacToeApi.joinRoom(userName, roomName)
-            if (!response.isSuccessful) {
+            val result = response.body()
+            if (response.isSuccessful) {
+                result ?: BasicApiResponse()
+            } else {
                 throw HttpException(response)
             }
         }
     }
 
-    override suspend fun createRoom(request: CreateRoomRequest): ResponseResult<Unit> {
+    override suspend fun createRoom(request: CreateRoomRequest): ResponseResult<BasicApiResponse> {
         return safeApiCall(dispatcherProvider.io) {
             val response = ticTacToeApi.createRoom(request)
-            if (!response.isSuccessful) {
+            val result = response.body()
+            if (response.isSuccessful) {
+                result ?: BasicApiResponse()
+            } else {
                 throw HttpException(response)
             }
         }

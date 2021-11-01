@@ -58,21 +58,43 @@ fun Navigation(
             ChooseUserNameScreen(navController = navController)
         }
 
-        composable(Screen.CreateNewRoomScreen.route) {
-            CreateNewRoomScreen(navController = navController, scaffoldState = scaffoldState)
+        composable(
+            route = Screen.CreateNewRoomScreen.route,
+            arguments = listOf(
+                navArgument(
+                    name = "userName"
+                ) {
+                    nullable = false
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            val userName = it.arguments?.getString("userName").toString()
+            CreateNewRoomScreen(
+                navController = navController,
+                scaffoldState = scaffoldState,
+                userName = userName
+            )
         }
 
         composable(
-            route = Screen.OnlineGameScreen.route + "/{roomName}",
+            route = Screen.OnlineGameScreen.route + "/{roomName}/{userName}",
             arguments = listOf(
                 navArgument("roomName") {
+                    type = NavType.StringType
+                    nullable = false
+                },
+                navArgument(
+                    "userName"
+                ) {
                     type = NavType.StringType
                     nullable = false
                 }
             )
         ) {
             val roomName = it.arguments?.getString("roomName").toString()
-            OnlineGameScreen(roomName = roomName, onNavigateUp = {
+            val userName = it.arguments?.getString("userName").toString()
+            OnlineGameScreen(roomName = roomName,userName = userName, onNavigateUp = {
                 navController.popBackStack()
             })
         }

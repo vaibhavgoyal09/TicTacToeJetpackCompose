@@ -2,6 +2,7 @@ package com.vaibhav.core.networking
 
 import com.vaibhav.core.models.Room
 import com.vaibhav.core.models.request.CreateRoomRequest
+import com.vaibhav.core.models.response.BasicApiResponse
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.http.Body
@@ -19,13 +20,13 @@ interface TicTacToeHttpApi {
     @POST("room/create")
     suspend fun createRoom(
         @Body request: CreateRoomRequest
-    ): Response<Unit>
+    ): Response<BasicApiResponse>
 
     @GET("room/join")
     suspend fun joinRoom(
         @Query("userName") userName: String,
         @Query("roomName") roomName: String
-    ): Response<Unit>
+    ): Response<BasicApiResponse>
 
     companion object {
         fun create(retrofit: Retrofit): TicTacToeHttpApi {
