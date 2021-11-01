@@ -1,4 +1,4 @@
-package com.vaibhav.core.models
+package com.vaibhav.core.models.response
 
 import com.squareup.moshi.JsonClass
 

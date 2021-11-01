@@ -1,6 +1,7 @@
 package com.vaibhav.core.repository.abstraction
 
 import com.vaibhav.core.models.Room
+import com.vaibhav.core.models.request.CreateRoomRequest
 import com.vaibhav.util.ResponseResult
 
 interface RoomsRepository {
@@ -9,5 +10,5 @@ interface RoomsRepository {
 
     suspend fun joinRoom(userName: String, roomName: String): ResponseResult<Unit>
 
-    suspend fun createRoom(room: Room): ResponseResult<Unit>
+    suspend fun createRoom(request: CreateRoomRequest): ResponseResult<Unit>
 }

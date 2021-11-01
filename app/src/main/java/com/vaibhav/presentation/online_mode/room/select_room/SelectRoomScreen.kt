@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -220,33 +221,38 @@ fun RoomsListComposable(
             .padding(top = 16.dp, bottom = 8.dp)
     ) {
         items(rooms) { room ->
-            Card(
-                border = BorderStroke(width = 1.dp, color = MaterialTheme.colors.onSurface),
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 8.dp, end = 8.dp),
-                onClick = {
-                    onRoomClick(room)
-                },
-                backgroundColor = MaterialTheme.colors.background
+                    .padding(start = 8.dp, end = 8.dp , bottom = 8.dp)
             ) {
-                Row(
+                Card(
+                    border = BorderStroke(width = 1.dp, color = MaterialTheme.colors.onSurface),
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(14.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                        .fillMaxWidth(),
+                    onClick = {
+                        onRoomClick(room)
+                    },
+                    backgroundColor = Color.Transparent
                 ) {
-                    Text(
-                        text = room.name,
-                        color = MaterialTheme.colors.onSurface,
-                        style = MaterialTheme.typography.body1
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(14.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = room.name,
+                            color = MaterialTheme.colors.onSurface,
+                            style = MaterialTheme.typography.body1
+                        )
 
-                    Text(
-                        text = "${room.playersCount}/2",
-                        color = MaterialTheme.colors.onSurface,
-                        style = MaterialTheme.typography.body1
-                    )
+                        Text(
+                            text = "${room.playersCount}/2",
+                            color = MaterialTheme.colors.onSurface,
+                            style = MaterialTheme.typography.body1
+                        )
+                    }
                 }
             }
         }
