@@ -233,7 +233,7 @@ fun RoomsListComposable(
                     onClick = {
                         onRoomClick(room)
                     },
-                    backgroundColor = Color.Transparent
+                    backgroundColor = MaterialTheme.colors.background
                 ) {
                     Row(
                         modifier = Modifier

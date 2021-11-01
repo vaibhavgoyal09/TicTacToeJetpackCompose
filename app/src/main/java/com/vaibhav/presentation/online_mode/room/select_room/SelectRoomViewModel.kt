@@ -74,7 +74,7 @@ class SelectRoomViewModel(
                 is ResponseResult.Success -> {
                     if (result.data!!.isSuccessful) {
                         _selectRoomEvent.emit(
-                            SelectRoomOutputEvent.Navigate(Screen.OnlineGameScreen.route + "/$roomName")
+                            SelectRoomOutputEvent.Navigate(Screen.OnlineGameScreen.route + "/$roomName" + "/$userName")
                         )
                     } else {
                         showSnackBar(result.data.message ?: "Error while joining room.")

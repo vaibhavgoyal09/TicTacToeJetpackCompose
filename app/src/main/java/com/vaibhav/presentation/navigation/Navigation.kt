@@ -59,7 +59,7 @@ fun Navigation(
         }
 
         composable(
-            route = Screen.CreateNewRoomScreen.route,
+            route = Screen.CreateNewRoomScreen.route + "/{userName}",
             arguments = listOf(
                 navArgument(
                     name = "userName"
