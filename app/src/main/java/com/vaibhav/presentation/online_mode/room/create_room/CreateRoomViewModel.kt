@@ -96,7 +96,7 @@ class CreateRoomViewModel(
         when (val result = roomsRepository.joinRoom(userName, roomName)) {
             is ResponseResult.Success -> {
                 if (result.data!!.isSuccessful) {
-                    _uiEvent.emit(UiEvent.Navigate(Screen.OnlineGameScreen.route + "/$roomName"))
+                    _uiEvent.emit(UiEvent.Navigate(Screen.OnlineGameScreen.route + "/$roomName" + "/$userName"))
                 } else {
                     showSnackBar(result.data.message ?: "Error while joining room.")
                 }
