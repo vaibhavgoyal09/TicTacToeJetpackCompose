@@ -5,14 +5,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.vaibhav.presentation.common.components.GameBoard
 
 @Composable
 fun OnlineGameScreen(
-    roomName: String,
-    userName: String,
+    viewModel: OnlineGameViewModel = hiltViewModel(),
     onNavigateUp: () -> Unit
 ) {
+
     Box(
         modifier = Modifier
             .fillMaxSize()

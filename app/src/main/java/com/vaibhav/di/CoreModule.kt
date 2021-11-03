@@ -1,5 +1,6 @@
 package com.vaibhav.di
 
+import android.app.Application
 import com.squareup.moshi.Moshi
 import com.tinder.scarlet.Scarlet
 import com.tinder.scarlet.lifecycle.android.AndroidLifecycle
@@ -14,21 +15,31 @@ import com.vaibhav.core.repository.implementation.RoomsRepositoryImpl
 import com.vaibhav.util.Constants.SOCKET_CONNECT_RETRY_INTERVAL
 import com.vaibhav.util.Constants.TIC_TAC_TOE_HTTP_API_BASE_URL
 import com.vaibhav.util.Constants.TIC_TAC_TOE_SOCKET_API_URL
+import com.vaibhav.util.DispatcherProvider
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.android.ext.koin.androidApplication
-import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
-val coreModule = module {
+@Module
+@InstallIn(SingletonComponent::class)
+object CoreModule {
 
-    single {
-        OkHttpClient.Builder()
+    @Singleton
+    @Provides
+    fun provideOkHttpClientBuilder(
+        clientId: String
+    ): OkHttpClient.Builder {
+        return OkHttpClient.Builder()
             .addInterceptor { chain ->
                 val url = chain.request().url.newBuilder()
-                    .addQueryParameter("client_id", get())
+                    .addQueryParameter("client_id", clientId)
                     .build()
                 val request = chain.request().newBuilder()
                     .url(url)
@@ -40,48 +51,69 @@ val coreModule = module {
             })
     }
 
-    single {
-        Moshi.Builder().build()
+    @Singleton
+    @Provides
+    fun provideMoshi(): Moshi {
+        return Moshi.Builder().build()
     }
 
-    single {
-
-        val okHttpClientBuilder = get<OkHttpClient.Builder>()
+    @Singleton
+    @Provides
+    fun provideRetrofit(
+        okHttpClientBuilder: OkHttpClient.Builder,
+        moshi: Moshi
+    ): Retrofit {
         val okHttpClient = okHttpClientBuilder
             .readTimeout(1, TimeUnit.MINUTES)
             .writeTimeout(1, TimeUnit.MINUTES)
             .build()
 
-        Retrofit.Builder()
+        return Retrofit.Builder()
             .client(okHttpClient)
             .baseUrl(TIC_TAC_TOE_HTTP_API_BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create(get()))
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
     }
 
-    single {
-        TicTacToeHttpApi.create(get())
+    @Singleton
+    @Provides
+    fun providesTicTacToeHttpApi(retrofit: Retrofit): TicTacToeHttpApi {
+        return TicTacToeHttpApi.create(retrofit)
     }
 
-    single {
+    @Singleton
+    @Provides
+    fun provideScarlet(
+        okHttpClientBuilder: OkHttpClient.Builder,
+        moshi: Moshi,
+        app: Application
+    ): Scarlet {
 
-        val okHttpClientBuilder = get<OkHttpClient.Builder>()
         val okHttpClient = okHttpClientBuilder.build()
 
-        Scarlet.Builder()
-            .addMessageAdapterFactory(CustomMoshiMessageAdapter.Factory(get()))
+        return Scarlet.Builder()
+            .addMessageAdapterFactory(CustomMoshiMessageAdapter.Factory(moshi))
             .addStreamAdapterFactory(FlowStreamAdapter.Factory)
             .backoffStrategy(LinearBackoffStrategy(SOCKET_CONNECT_RETRY_INTERVAL))
-            .lifecycle(AndroidLifecycle.ofApplicationForeground(androidApplication()))
+            .lifecycle(AndroidLifecycle.ofApplicationForeground(app))
             .webSocketFactory(okHttpClient.newWebSocketFactory(TIC_TAC_TOE_SOCKET_API_URL))
             .build()
     }
 
-    single {
-        TicTacToeSocketApi.create(get())
+    @Provides
+    @Singleton
+    fun provideTicTacToeSocketApi(
+        scarlet: Scarlet
+    ): TicTacToeSocketApi {
+        return TicTacToeSocketApi.create(scarlet)
     }
 
-    factory<RoomsRepository> {
-        RoomsRepositoryImpl(get(), get())
+    @Provides
+    @Singleton
+    fun provideRoomRepository(
+        ticTacToeHttpApi: TicTacToeHttpApi,
+        dispatcherProvider: DispatcherProvider
+    ): RoomsRepository {
+        return RoomsRepositoryImpl(ticTacToeHttpApi, dispatcherProvider)
     }
 }

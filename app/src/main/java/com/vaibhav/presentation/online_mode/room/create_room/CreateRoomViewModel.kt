@@ -2,6 +2,7 @@ package com.vaibhav.presentation.online_mode.room.create_room
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaibhav.core.models.request.CreateRoomRequest
@@ -12,12 +13,16 @@ import com.vaibhav.presentation.navigation.Screen
 import com.vaibhav.util.Constants.MAX_ROOM_NAME_CHAR_COUNT
 import com.vaibhav.util.Constants.MIN_ROOM_NAME_CHAR_COUNT
 import com.vaibhav.util.ResponseResult
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CreateRoomViewModel(
-    private val roomsRepository: RoomsRepository
+@HiltViewModel
+class CreateRoomViewModel @Inject constructor(
+    private val roomsRepository: RoomsRepository,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _uiEvent = MutableSharedFlow<UiEvent>()
@@ -63,9 +68,9 @@ class CreateRoomViewModel(
 
                     if (isValidRoomName) {
                         val isRoomCreated = createRoom(roomName)
-
+                        val userName = savedStateHandle.get<String>("userName") ?: ""
                         if (isRoomCreated) {
-                            joinRoom(event.userName, roomName)
+                            joinRoom(userName, roomName)
                         }
                     }
                 }

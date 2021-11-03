@@ -9,12 +9,12 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.vaibhav.presentation.online_mode.username.ChooseUserNameScreen
-import com.vaibhav.presentation.offline_mode.username.EnterUserNameScreen
 import com.vaibhav.presentation.home_screen.HomeScreen
+import com.vaibhav.presentation.offline_mode.username.EnterUserNameScreen
 import com.vaibhav.presentation.online_mode.game.OnlineGameScreen
 import com.vaibhav.presentation.online_mode.room.create_room.CreateNewRoomScreen
 import com.vaibhav.presentation.online_mode.room.select_room.SelectRoomScreen
+import com.vaibhav.presentation.online_mode.username.ChooseUserNameScreen
 
 @Composable
 fun Navigation(
@@ -69,11 +69,9 @@ fun Navigation(
                 }
             )
         ) {
-            val userName = it.arguments?.getString("userName").toString()
             CreateNewRoomScreen(
                 navController = navController,
-                scaffoldState = scaffoldState,
-                userName = userName
+                scaffoldState = scaffoldState
             )
         }
 
@@ -92,11 +90,7 @@ fun Navigation(
                 }
             )
         ) {
-            val roomName = it.arguments?.getString("roomName").toString()
-            val userName = it.arguments?.getString("userName").toString()
-            OnlineGameScreen(roomName = roomName,userName = userName, onNavigateUp = {
-                navController.popBackStack()
-            })
+            OnlineGameScreen(onNavigateUp = { navController.navigateUp() })
         }
     }
 }

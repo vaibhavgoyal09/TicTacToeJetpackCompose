@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.vaibhav.R
 import com.vaibhav.core.models.Room
@@ -35,7 +35,6 @@ import com.vaibhav.presentation.common.theme.customFonts
 import com.vaibhav.presentation.common.util.Error
 import com.vaibhav.util.Constants
 import kotlinx.coroutines.flow.collectLatest
-import org.koin.androidx.compose.getViewModel
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalAnimationApi::class)
 @Composable
@@ -43,7 +42,7 @@ fun SelectRoomScreen(
     navController: NavController,
     userName: String,
     scaffoldState: ScaffoldState,
-    viewModel: SelectRoomViewModel = getViewModel()
+    viewModel: SelectRoomViewModel = hiltViewModel()
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -196,7 +195,7 @@ fun SelectRoomScreen(
 
             TextButton(
                 onClick = {
-                    viewModel.onEvent(SelectRoomInputEvent.CreateNewRoom(userName))
+                    viewModel.onEvent(SelectRoomInputEvent.CreateNewRoom)
                 }
             ) {
                 Text(

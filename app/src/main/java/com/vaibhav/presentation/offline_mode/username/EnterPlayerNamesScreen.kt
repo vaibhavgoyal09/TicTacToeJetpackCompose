@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.vaibhav.R
 import com.vaibhav.presentation.common.components.StandardTextField
@@ -26,12 +27,11 @@ import com.vaibhav.presentation.common.util.UserNameValidationErrors
 import com.vaibhav.util.Constants
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
-import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun EnterUserNameScreen(
     navController: NavController,
-    viewModel: EnterPlayerNamesViewModel = getViewModel()
+    viewModel: EnterPlayerNamesViewModel = hiltViewModel()
 ) {
 
     val focusManager = LocalFocusManager.current

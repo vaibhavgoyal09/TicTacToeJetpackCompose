@@ -9,8 +9,9 @@ import com.vaibhav.core.util.safeApiCall
 import com.vaibhav.util.DispatcherProvider
 import com.vaibhav.util.ResponseResult
 import retrofit2.HttpException
+import javax.inject.Inject
 
-class RoomsRepositoryImpl(
+class RoomsRepositoryImpl @Inject constructor (
     private val ticTacToeApi: TicTacToeHttpApi,
     private val dispatcherProvider: DispatcherProvider
 ) : RoomsRepository {

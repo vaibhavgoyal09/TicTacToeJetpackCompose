@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.vaibhav.R
 import com.vaibhav.presentation.common.components.StandardTextField
@@ -27,23 +28,22 @@ import com.vaibhav.presentation.navigation.Screen
 import com.vaibhav.util.Constants
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
-import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun ChooseUserNameScreen(
     navController: NavController,
-    viewModel: ChooseUserNameViewModel = getViewModel()
+    viewModel: ChooseUserNameViewModel = hiltViewModel()
 ) {
 
     val userNameState = viewModel.userNameFieldState.value
     val focusManager = LocalFocusManager.current
 
     LaunchedEffect(key1 = "success") {
-        viewModel.userNameValidationEvent.collectLatest { event ->
+        viewModel.userNameUiEvent.collectLatest { event ->
             when (event) {
-                is ChooseUserNameValidationEvent.Success -> {
+                is ChooseUserNameUiEvent.Navigate -> {
                     delay(500L)
-                    navController.navigate(Screen.SelectRoomScreen.route + "/${event.userName}") {
+                    navController.navigate(event.route) {
                         popUpTo(Screen.EnterUserNameScreen.route) { inclusive = true }
                     }
                 }

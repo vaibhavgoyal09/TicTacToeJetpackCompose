@@ -16,20 +16,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.vaibhav.R
 import com.vaibhav.presentation.common.components.StandardTextField
 import com.vaibhav.presentation.common.util.UiEvent
 import com.vaibhav.util.Constants
 import kotlinx.coroutines.flow.collectLatest
-import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun CreateNewRoomScreen(
     navController: NavController,
     scaffoldState: ScaffoldState,
-    viewModel: CreateRoomViewModel = getViewModel(),
-    userName: String
+    viewModel: CreateRoomViewModel = hiltViewModel()
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -120,7 +119,7 @@ fun CreateNewRoomScreen(
                     viewModel.onEvent(CreateRoomInputEvents.EnteredRoomName(it))
                 },
                 onImeAction = {
-                    createAndJoinRoom(userName, viewModel, focusManager)
+                    createAndJoinRoom(viewModel, focusManager)
                 },
                 textColor = MaterialTheme.colors.onSurface
             )
@@ -132,7 +131,7 @@ fun CreateNewRoomScreen(
             Button(
                 shape = RoundedCornerShape(15.dp),
                 onClick = {
-                    createAndJoinRoom(userName, viewModel, focusManager)
+                    createAndJoinRoom(viewModel, focusManager)
                 },
                 modifier = Modifier
                     .wrapContentSize()
@@ -153,10 +152,9 @@ fun CreateNewRoomScreen(
 }
 
 private fun createAndJoinRoom(
-    userName: String,
     viewModel: CreateRoomViewModel,
     focusManager: FocusManager
 ) {
-    viewModel.onEvent(CreateRoomInputEvents.CreateRoom(userName))
+    viewModel.onEvent(CreateRoomInputEvents.CreateRoom)
     focusManager.clearFocus()
 }

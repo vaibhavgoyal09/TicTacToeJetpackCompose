@@ -2,20 +2,25 @@ package com.vaibhav.presentation.online_mode.room.select_room
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaibhav.core.repository.abstraction.RoomsRepository
 import com.vaibhav.presentation.common.util.StandardTextFieldState
 import com.vaibhav.presentation.navigation.Screen
 import com.vaibhav.util.ResponseResult
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SelectRoomViewModel(
-    private val roomsRepository: RoomsRepository
+@HiltViewModel
+class SelectRoomViewModel @Inject constructor(
+    private val roomsRepository: RoomsRepository,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _searchFieldState = mutableStateOf(StandardTextFieldState())
@@ -58,7 +63,13 @@ class SelectRoomViewModel(
             is SelectRoomInputEvent.CreateNewRoom -> {
                 viewModelScope.launch {
                     _selectRoomEvent.emit(
-                        SelectRoomOutputEvent.Navigate(Screen.CreateNewRoomScreen.route + "/${inputEvent.userName}")
+                        SelectRoomOutputEvent.Navigate(
+                            Screen.CreateNewRoomScreen.route + "/${
+                                savedStateHandle.get<String>(
+                                    "userName"
+                                )
+                            }"
+                        )
                     )
                 }
             }

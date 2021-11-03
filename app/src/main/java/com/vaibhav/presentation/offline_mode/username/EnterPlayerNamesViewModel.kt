@@ -5,11 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaibhav.presentation.common.util.StandardTextFieldState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class EnterPlayerNamesViewModel : ViewModel() {
+@HiltViewModel
+class EnterPlayerNamesViewModel @Inject constructor() : ViewModel() {
 
     private val _player1NameState = mutableStateOf(StandardTextFieldState())
     val player1NameState: State<StandardTextFieldState> = _player1NameState

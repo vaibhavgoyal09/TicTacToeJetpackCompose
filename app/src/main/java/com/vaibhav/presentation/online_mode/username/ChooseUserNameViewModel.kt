@@ -6,18 +6,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaibhav.presentation.common.util.StandardTextFieldState
 import com.vaibhav.presentation.common.util.UserNameValidationErrors
+import com.vaibhav.presentation.navigation.Screen
 import com.vaibhav.util.Constants
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ChooseUserNameViewModel: ViewModel() {
+@HiltViewModel
+class ChooseUserNameViewModel @Inject constructor() : ViewModel() {
 
     private val _userNameFieldState = mutableStateOf(StandardTextFieldState())
     val userNameFieldState: State<StandardTextFieldState> = _userNameFieldState
 
-    private val _userNameValidationEvent = MutableSharedFlow<ChooseUserNameValidationEvent>()
-    val userNameValidationEvent: SharedFlow<ChooseUserNameValidationEvent> = _userNameValidationEvent
+    private val _userNameValidationEvent = MutableSharedFlow<ChooseUserNameUiEvent>()
+    val userNameUiEvent: SharedFlow<ChooseUserNameUiEvent> = _userNameValidationEvent
 
     fun onEvent(eventChoose: ChooseUserNameEvent) {
         when (eventChoose) {
@@ -44,7 +48,9 @@ class ChooseUserNameViewModel: ViewModel() {
                             )
                         }
                         else -> _userNameValidationEvent.emit(
-                            ChooseUserNameValidationEvent.Success(_userNameFieldState.value.text)
+                            ChooseUserNameUiEvent.Navigate(
+                                Screen.SelectRoomScreen.route + "/$userName"
+                            )
                         )
                     }
                 }

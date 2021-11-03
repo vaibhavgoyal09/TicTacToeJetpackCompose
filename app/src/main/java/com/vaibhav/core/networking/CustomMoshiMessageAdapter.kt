@@ -10,7 +10,7 @@ import org.json.JSONObject
 import java.lang.reflect.Type
 
 @Suppress("UNCHECKED_CAST")
-class CustomMoshiMessageAdapter<T>(
+class CustomMoshiMessageAdapter<T> private constructor(
     private val moshi: Moshi
 ) : MessageAdapter<T> {
 
