@@ -1,10 +1,11 @@
 package com.vaibhav.core.util
 
 import com.vaibhav.util.ResponseResult
+import io.ktor.client.features.*
+import io.ktor.http.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import okio.IOException
-import retrofit2.HttpException
 
 internal suspend fun <T> safeApiCall(
     dispatcher: CoroutineDispatcher,
@@ -17,10 +18,20 @@ internal suspend fun <T> safeApiCall(
             throwable.printStackTrace()
 
             when (throwable) {
-                is HttpException -> {
-                    ResponseResult.Error(
-                        throwable.response()?.errorBody()?.toString() ?: NetworkErrors.ERROR_UNKNOWN
-                    )
+                is ClientRequestException -> {
+                    val httpStatusCode = throwable.response.status
+                    if (httpStatusCode == HttpStatusCode.BadRequest) {
+                        ResponseResult.Error(
+                            throwable.response.status.description
+                        )
+                    } else {
+                        ResponseResult.Error(
+                            NetworkErrors.ERROR_UNKNOWN
+                        )
+                    }
+                }
+                is ServerResponseException -> {
+                    ResponseResult.Error(NetworkErrors.ERROR_UNKNOWN)
                 }
                 is IOException -> {
                     ResponseResult.Error(NetworkErrors.INTERNET_ERROR)

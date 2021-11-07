@@ -82,7 +82,7 @@ dependencies {
     implementation "androidx.datastore:datastore-preferences:1.0.0"
 
     // Swipe Refresh
-    implementation "com.google.accompanist:accompanist-swiperefresh:0.21.0-beta"
+    implementation 'com.google.accompanist:accompanist-swiperefresh:0.21.2-beta'
 
     // Lifecycle
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
@@ -93,25 +93,19 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
 
     //Dagger - Hilt
-    implementation "com.google.dagger:hilt-android:2.38.1"
-    kapt "com.google.dagger:hilt-compiler:2.38.1"
+    implementation 'com.google.dagger:hilt-android:2.40'
+    kapt 'com.google.dagger:hilt-compiler:2.40'
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
     kapt "androidx.hilt:hilt-compiler:1.0.0"
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0-alpha03'
 
-    // Scarlet - For Web Sockets Integration
-    implementation "com.tinder.scarlet:scarlet:$scarletVersion"
-    implementation "com.tinder.scarlet:websocket-okhttp:$scarletVersion"
-    implementation "com.tinder.scarlet:message-adapter-moshi:$scarletVersion"
-    implementation "com.tinder.scarlet:lifecycle-android:$scarletVersion"
-
-    // Retrofit and OkHttp3
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2'
-    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.2'
-    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
-
-    // Moshi
-    implementation "com.squareup.moshi:moshi:1.12.0"
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.12.0"
+    // Ktor Client
+    implementation "io.ktor:ktor-client-core:$ktorVersion"
+    implementation "io.ktor:ktor-client-android:$ktorVersion"
+    implementation "io.ktor:ktor-client-serialization:$ktorVersion"
+    implementation "io.ktor:ktor-client-logging:$ktorVersion"
+    implementation "ch.qos.logback:logback-classic:1.2.6"
+    implementation "io.ktor:ktor-client-gson:$ktorVersion"
+    implementation "io.ktor:ktor-client-websockets:$ktorVersion"
+    implementation "io.ktor:ktor-client-okhttp:$ktorVersion"
 }

@@ -92,7 +92,7 @@ class SelectRoomViewModel @Inject constructor(
                     }
                 }
                 is ResponseResult.Error -> {
-                    showSnackBar("Error while joining room.")
+                    showSnackBar(result.error!!)
                 }
             }
         }
