@@ -1,7 +1,10 @@
 package com.vaibhav.di
 
+import com.google.gson.Gson
+import com.vaibhav.core.networking.TicTacToeSocketApi
 import com.vaibhav.core.networking.TicTacToeHttpApi
 import com.vaibhav.core.networking.TicTacToeHttpApiImpl
+import com.vaibhav.core.networking.TicTacToeSocketApiImpl
 import com.vaibhav.core.repository.abstraction.RoomsRepository
 import com.vaibhav.core.repository.implementation.RoomsRepositoryImpl
 import com.vaibhav.util.DispatcherProvider
@@ -13,6 +16,7 @@ import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.logging.*
+import io.ktor.client.features.websocket.*
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -54,6 +58,10 @@ object CoreModule {
             install(JsonFeature) {
                 serializer = GsonSerializer()
             }
+
+            install(WebSockets) {
+
+            }
         }
     }
 
@@ -63,6 +71,22 @@ object CoreModule {
         client: HttpClient
     ): TicTacToeHttpApi {
         return TicTacToeHttpApiImpl(client)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTicTacToeSocketApi(
+        client: HttpClient,
+        dispatcherProvider: DispatcherProvider,
+        gson: Gson
+    ): TicTacToeSocketApi {
+        return TicTacToeSocketApiImpl(dispatcherProvider, client, gson)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGson(): Gson {
+        return Gson()
     }
 
     @Provides

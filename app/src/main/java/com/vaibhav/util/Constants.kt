@@ -6,7 +6,7 @@ object Constants {
     const val MIN_USERNAME_CHAR_COUNT = 4
     const val MAX_ROOM_NAME_CHAR_COUNT = 25
 
-    const val TIC_TAC_TOE_SOCKET_API_URL = "https://tic-tac-toe-vaibhav.herokuapp.com/v1/game"
+    const val TIC_TAC_TOE_SOCKET_API_URL = "wss://tic-tac-toe-vaibhav.herokuapp.com/v1/game"
     const val MIN_ROOM_NAME_CHAR_COUNT = 4
 
     const val TYPE_JOIN_ROOM = "TYPE_JOIN_ROOM"
