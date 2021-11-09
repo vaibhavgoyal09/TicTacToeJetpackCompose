@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaibhav.core.repository.abstraction.RoomsRepository
 import com.vaibhav.presentation.common.util.StandardTextFieldState
-import com.vaibhav.presentation.navigation.Screen
+import com.vaibhav.presentation.common.navigation.Screen
 import com.vaibhav.util.ResponseResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job

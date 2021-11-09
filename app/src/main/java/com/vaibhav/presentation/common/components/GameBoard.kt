@@ -21,7 +21,8 @@ import com.vaibhav.presentation.common.theme.GameBoardBackground
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun GameBoard(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onItemClick: (position: Int) -> Unit = {}
 ) {
     Card(
         modifier = modifier
@@ -50,13 +51,19 @@ fun GameBoard(
 
 @Composable
 fun StandardImageView(
-    @DrawableRes imageResId: Int? = null
+    @DrawableRes imageResId: Int,
+    onClick: () -> Unit
 ) {
-    if (imageResId != null) {
+    Box(
+        modifier = Modifier
+            .size(33.dp)
+            .clickable { onClick() }
+    ) {
         Image(
             painter = painterResource(id = imageResId),
             contentDescription = null,
-            modifier = Modifier.size(100.dp)
+            modifier = Modifier
+                .fillMaxSize()
         )
     }
 }

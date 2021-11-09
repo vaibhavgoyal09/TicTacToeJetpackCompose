@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaibhav.presentation.common.util.StandardTextFieldState
 import com.vaibhav.presentation.common.util.UserNameValidationErrors
-import com.vaibhav.presentation.navigation.Screen
+import com.vaibhav.presentation.common.navigation.Screen
 import com.vaibhav.util.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow

@@ -1,4 +1,4 @@
-package com.vaibhav.presentation.navigation
+package com.vaibhav.presentation.common.navigation
 
 sealed class Screen(val route: String) {
 

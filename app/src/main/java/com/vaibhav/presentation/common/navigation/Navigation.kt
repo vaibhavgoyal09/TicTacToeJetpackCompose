@@ -1,13 +1,15 @@
-package com.vaibhav.presentation.navigation
+package com.vaibhav.presentation.common.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.vaibhav.presentation.home_screen.HomeScreen
 import com.vaibhav.presentation.offline_mode.username.EnterUserNameScreen
@@ -21,6 +23,9 @@ fun Navigation(
     navController: NavHostController,
     scaffoldState: ScaffoldState
 ) {
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+
     NavHost(
         navController = navController,
         startDestination = Screen.HomeScreen.route,
@@ -90,7 +95,14 @@ fun Navigation(
                 }
             )
         ) {
-            OnlineGameScreen(onNavigateUp = { navController.navigateUp() })
+
+            val currentBackStackRoute = navBackStackEntry?.destination?.route
+            val isOnlineGameScreenComposableVisible = currentBackStackRoute == it.destination.route
+
+            OnlineGameScreen(
+                isBackHandleEnabled = isOnlineGameScreenComposableVisible,
+                onNavigateUp = { navController.navigateUp() }
+            )
         }
     }
 }

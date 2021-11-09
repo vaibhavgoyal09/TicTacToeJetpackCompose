@@ -24,7 +24,7 @@ import androidx.navigation.NavController
 import com.vaibhav.R
 import com.vaibhav.presentation.common.components.StandardTextField
 import com.vaibhav.presentation.common.util.UserNameValidationErrors
-import com.vaibhav.presentation.navigation.Screen
+import com.vaibhav.presentation.common.navigation.Screen
 import com.vaibhav.util.Constants
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest

@@ -9,7 +9,7 @@ import com.vaibhav.core.models.request.CreateRoomRequest
 import com.vaibhav.core.repository.abstraction.RoomsRepository
 import com.vaibhav.presentation.common.util.StandardTextFieldState
 import com.vaibhav.presentation.common.util.UiEvent
-import com.vaibhav.presentation.navigation.Screen
+import com.vaibhav.presentation.common.navigation.Screen
 import com.vaibhav.util.Constants.MAX_ROOM_NAME_CHAR_COUNT
 import com.vaibhav.util.Constants.MIN_ROOM_NAME_CHAR_COUNT
 import com.vaibhav.util.ResponseResult

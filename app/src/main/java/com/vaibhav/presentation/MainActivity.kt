@@ -10,7 +10,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.vaibhav.presentation.navigation.Navigation
+import com.vaibhav.presentation.common.navigation.Navigation
 import com.vaibhav.presentation.common.theme.TicTacToeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
