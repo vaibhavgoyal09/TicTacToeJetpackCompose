@@ -11,15 +11,12 @@ import com.vaibhav.util.DispatcherProvider
 import io.ktor.client.*
 import io.ktor.client.features.websocket.*
 import io.ktor.http.cio.websocket.*
-import kotlinx.coroutines.CompletableJob
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -27,7 +24,7 @@ class TicTacToeSocketApiImpl @Inject constructor(
     private val dispatchers: DispatcherProvider,
     private val client: HttpClient,
     private val gson: Gson
-): TicTacToeSocketApi {
+) : TicTacToeSocketApi {
 
     private val _socketEventChannel: Channel<SocketEvent> = Channel()
 
@@ -35,7 +32,17 @@ class TicTacToeSocketApiImpl @Inject constructor(
 
     private var webSocketSession: DefaultClientWebSocketSession? = null
 
-    private val socketConnectJob: CompletableJob = Job()
+    private lateinit var socketConnectJob: CompletableJob
+
+    private val socketConnectRetryJob: Job = Job()
+
+    private val socketExceptionHandler = CoroutineExceptionHandler { _, exception ->
+        handleSocketError(exception)
+    }
+
+    private val childExceptionHandler = CoroutineExceptionHandler { _, exception ->
+        handleSocketError(exception)
+    }
 
     override val socketEvents: Flow<SocketEvent>
         get() = _socketEventChannel.receiveAsFlow().flowOn(dispatchers.io)
@@ -44,29 +51,24 @@ class TicTacToeSocketApiImpl @Inject constructor(
         get() = _baseModelChannel.receiveAsFlow().flowOn(dispatchers.io)
 
     init {
-
         openConnection()
-
-        socketConnectJob.invokeOnCompletion {
-            Log.e("TicTacToeSocketApiImpl", it?.localizedMessage ?: "Error")
-            client.close()
-            CoroutineScope(dispatchers.io).launch {
-                _socketEventChannel.send(SocketEvent.ConnectionClosed(null))
-            }
-        }
     }
 
     private fun openConnection() {
-        CoroutineScope(dispatchers.io + socketConnectJob).launch {
-            client.webSocket(urlString = TIC_TAC_TOE_SOCKET_API_URL) {
-                webSocketSession = this
+        socketConnectJob = Job()
+        CoroutineScope(dispatchers.io + socketConnectJob).launch(socketExceptionHandler) {
+            supervisorScope {
+                println("trying to connect to web socket connection")
+                client.webSocket(urlString = TIC_TAC_TOE_SOCKET_API_URL) {
+                    webSocketSession = this
 
-                _socketEventChannel.send(SocketEvent.ConnectionOpened)
+                    _socketEventChannel.send(SocketEvent.ConnectionOpened)
 
-                println("Web socket opened")
-
-                val messagesReceivedRoutine = launch { observeSocketMessages() }
-                messagesReceivedRoutine.join()
+                    val messagesReceivedRoutine = launch(childExceptionHandler) {
+                        observeSocketMessages()
+                    }
+                    messagesReceivedRoutine.join()
+                }
             }
         }
     }
@@ -82,25 +84,40 @@ class TicTacToeSocketApiImpl @Inject constructor(
         }
     }
 
-    private suspend fun observeSocketMessages() {
-        try {
-            webSocketSession?.incoming?.consumeEach { frame ->
-                if (frame is Frame.Text) {
-                    val message = frame.readText()
-                    val jsonObject = JsonParser.parseString(message).asJsonObject
-
-                    val type = when (jsonObject.get("type").asString) {
-                        TYPE_JOIN_ROOM -> JoinRoom::class.java
-                        else -> BaseModel::class.java
-                    }
-
-                    val payload: BaseModel = gson.fromJson(message, type)
-                    _baseModelChannel.send(payload)
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            socketConnectJob.cancel(CancellationException(cause = e))
+    private fun handleSocketError(throwable: Throwable) {
+        Log.e("TicTacToeSocketApiImpl", throwable.localizedMessage ?: "Error")
+        CoroutineScope(dispatchers.io).launch {
+            _socketEventChannel.send(SocketEvent.ConnectionClosed(null))
         }
+        retryToConnect()
+    }
+
+    private fun retryToConnect() {
+        CoroutineScope(dispatchers.io + socketConnectRetryJob).launch {
+            delay(SOCKET_CONNECT_RETRY_INTERVAL)
+            _socketEventChannel.send(SocketEvent.RetryingToConnect)
+            openConnection()
+        }
+    }
+
+    private suspend fun observeSocketMessages() {
+        webSocketSession?.incoming?.consumeEach { frame ->
+            if (frame is Frame.Text) {
+                val message = frame.readText()
+                val jsonObject = JsonParser.parseString(message).asJsonObject
+
+                val type = when (jsonObject.get("type").asString) {
+                    TYPE_JOIN_ROOM -> JoinRoom::class.java
+                    else -> BaseModel::class.java
+                }
+
+                val payload: BaseModel = gson.fromJson(message, type)
+                _baseModelChannel.send(payload)
+            }
+        }
+    }
+
+    companion object {
+        private const val SOCKET_CONNECT_RETRY_INTERVAL = 3000L // 3 Seconds
     }
 }

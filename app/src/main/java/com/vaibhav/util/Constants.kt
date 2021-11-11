@@ -12,6 +12,5 @@ object Constants {
     const val TYPE_JOIN_ROOM = "TYPE_JOIN_ROOM"
     const val TYPE_GAME_ERROR = "TYPE_GAME_ERROR"
     const val TYPE_PHASE_CHANGE = "TYPE_PHASE_CHANGE"
-
-    const val SOCKET_CONNECT_RETRY_INTERVAL = 3000L // 3 Seconds
+    const val TYPE_DISCONNECT_REQUEST = "TYPE_DISCONNECT_REQUEST"
 }

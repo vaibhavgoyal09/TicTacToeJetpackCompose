@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaibhav.core.models.ws.BaseModel
+import com.vaibhav.core.models.ws.DisconnectRequest
 import com.vaibhav.core.models.ws.JoinRoom
 import com.vaibhav.core.networking.SocketEvent
 import com.vaibhav.core.networking.TicTacToeSocketApi
@@ -50,6 +51,9 @@ class OnlineGameViewModel @Inject constructor(
                     is SocketEvent.ConnectionClosed -> {
                         Log.d("Online Game view model", "web socket connection closed")
                     }
+                    is SocketEvent.RetryingToConnect -> {
+                        println("Retrying to connect to web sockets")
+                    }
                 }
             }
         }
@@ -72,5 +76,10 @@ class OnlineGameViewModel @Inject constructor(
         viewModelScope.launch(dispatchers.io) {
             socketApi.sendMessage(baseModel)
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        sendBaseModel(DisconnectRequest())
     }
 }
