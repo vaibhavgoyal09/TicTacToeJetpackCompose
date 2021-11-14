@@ -83,7 +83,7 @@ fun Navigation(
         }
 
         composable(
-            route = Screen.OnlineGameScreen.route + "/{roomName}/{userName}",
+            route = Screen.OnlineGameScreen.route + "/{roomName}/{userName}" + "?existingPlayerUserName={existingPlayerUserName}",
             arguments = listOf(
                 navArgument("roomName") {
                     type = NavType.StringType
@@ -94,6 +94,10 @@ fun Navigation(
                 ) {
                     type = NavType.StringType
                     nullable = false
+                },
+                navArgument("existingPlayerUserName") {
+                    type = NavType.StringType
+                    nullable = true
                 }
             )
         ) {

@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vaibhav.core.models.request.CreateRoomRequest
 import com.vaibhav.core.repository.abstraction.RoomsRepository
+import com.vaibhav.presentation.common.navigation.Screen
 import com.vaibhav.presentation.common.util.StandardTextFieldState
 import com.vaibhav.presentation.common.util.UiEvent
-import com.vaibhav.presentation.common.navigation.Screen
 import com.vaibhav.util.Constants.MAX_ROOM_NAME_CHAR_COUNT
 import com.vaibhav.util.Constants.MIN_ROOM_NAME_CHAR_COUNT
 import com.vaibhav.util.ResponseResult
@@ -100,10 +100,17 @@ class CreateRoomViewModel @Inject constructor(
     private suspend fun joinRoom(userName: String, roomName: String) {
         when (val result = roomsRepository.joinRoom(userName, roomName)) {
             is ResponseResult.Success -> {
-                if (result.data!!.isSuccessful) {
-                    _uiEvent.emit(UiEvent.Navigate(Screen.OnlineGameScreen.route + "/$roomName" + "/$userName"))
+                if (result.data!!.isSuccess) {
+                    val route: String = if (result.data.existingPlayerUserName != null) {
+                        Screen.OnlineGameScreen.route + "/$roomName" + "/$userName" + "?existingPlayerUserName=${result.data.existingPlayerUserName}"
+                    } else {
+                        Screen.OnlineGameScreen.route + "/$roomName" + "/$userName"
+                    }
+                    _uiEvent.emit(
+                        UiEvent.Navigate(route)
+                    )
                 } else {
-                    showSnackBar(result.data.message ?: "Error while joining room.")
+                    showSnackBar(result.data.errorMessage ?: "Error while joining room.")
                 }
             }
             is ResponseResult.Error -> {

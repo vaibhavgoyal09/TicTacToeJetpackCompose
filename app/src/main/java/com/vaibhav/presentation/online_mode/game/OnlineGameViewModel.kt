@@ -42,6 +42,7 @@ class OnlineGameViewModel @Inject constructor(
 
     init {
         _player1NameState.value = savedStateHandle.get<String>("userName") ?: ""
+        _player2NameState.value = savedStateHandle.get<String>("existingPlayerUserName") ?: ""
         observeSocketEvents()
         observeSocketMessages()
     }

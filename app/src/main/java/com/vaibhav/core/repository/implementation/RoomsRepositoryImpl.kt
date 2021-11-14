@@ -3,6 +3,7 @@ package com.vaibhav.core.repository.implementation
 import com.vaibhav.core.models.Room
 import com.vaibhav.core.models.request.CreateRoomRequest
 import com.vaibhav.core.models.response.BasicApiResponse
+import com.vaibhav.core.models.response.JoinRoomResponse
 import com.vaibhav.core.networking.TicTacToeHttpApi
 import com.vaibhav.core.repository.abstraction.RoomsRepository
 import com.vaibhav.core.util.safeApiCall
@@ -24,7 +25,7 @@ class RoomsRepositoryImpl @Inject constructor(
     override suspend fun joinRoom(
         userName: String,
         roomName: String
-    ): ResponseResult<BasicApiResponse> {
+    ): ResponseResult<JoinRoomResponse> {
         return safeApiCall(dispatcherProvider.io) {
             ticTacToeApi.joinRoom(userName, roomName)
         }

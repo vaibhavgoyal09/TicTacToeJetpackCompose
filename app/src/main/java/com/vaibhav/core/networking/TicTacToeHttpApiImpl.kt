@@ -3,6 +3,7 @@ package com.vaibhav.core.networking
 import com.vaibhav.core.models.Room
 import com.vaibhav.core.models.request.CreateRoomRequest
 import com.vaibhav.core.models.response.BasicApiResponse
+import com.vaibhav.core.models.response.JoinRoomResponse
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -27,7 +28,7 @@ class TicTacToeHttpApiImpl @Inject constructor(
         }
     }
 
-    override suspend fun joinRoom(userName: String, roomName: String): BasicApiResponse {
+    override suspend fun joinRoom(userName: String, roomName: String): JoinRoomResponse {
         return client.get {
             url(HttpRoutes.JOIN_ROOM_ROUTE)
             parameter("userName", userName)
