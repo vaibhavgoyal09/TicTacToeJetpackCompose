@@ -2,6 +2,7 @@ package com.vaibhav.presentation.offline_mode.game
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -12,7 +13,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.vaibhav.presentation.common.components.ConfirmExitDialog
 import com.vaibhav.presentation.common.components.GameBoard
 import com.vaibhav.presentation.common.components.StandardScoreboard
+import com.vaibhav.presentation.common.components.StandardSettingsIcon
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun OfflineGameScreen(
     viewModel: OfflineGameViewModel = hiltViewModel(),
@@ -83,5 +86,15 @@ fun OfflineGameScreen(
             modifier = Modifier
                 .align(alignment = Alignment.Center)
         )
+
+        Box(
+            modifier = Modifier
+                .padding(bottom = 40.dp)
+                .align(Alignment.BottomCenter)
+        ) {
+            StandardSettingsIcon(
+                modifier =  Modifier.align(Alignment.Center)
+            )
+        }
     }
 }
