@@ -23,10 +23,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.vaibhav.R
 import com.vaibhav.presentation.common.components.StandardTextField
+import com.vaibhav.presentation.common.navigation.Screen
+import com.vaibhav.presentation.common.util.UiEvent
 import com.vaibhav.presentation.common.util.UserNameValidationErrors
 import com.vaibhav.util.Constants
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
 
 @Composable
 fun EnterUserNameScreen(
@@ -38,13 +39,17 @@ fun EnterUserNameScreen(
     val player1NameState = viewModel.player1NameState.value
     val player2FieldState = viewModel.player2NameState.value
 
-    LaunchedEffect(key1 = "success") {
-        viewModel.userNameValidationEvent.collectLatest { event ->
-            when (event) {
-                is EnterPlayerNamesValidationEvent.Success -> {
-                    delay(500L)
-
+    LaunchedEffect(key1 = "navigate") {
+        viewModel.uiEvent.collect { event ->
+            when(event) {
+                is UiEvent.Navigate -> {
+                    navController.navigate(event.route) {
+                        popUpTo(Screen.EnterUserNameScreen.route) {
+                            inclusive = true
+                        }
+                    }
                 }
+                else -> Unit
             }
         }
     }

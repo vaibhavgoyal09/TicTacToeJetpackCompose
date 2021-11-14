@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import com.vaibhav.presentation.home_screen.HomeScreen
+import com.vaibhav.presentation.offline_mode.game.OfflineGameScreen
 import com.vaibhav.presentation.offline_mode.username.EnterUserNameScreen
 import com.vaibhav.presentation.online_mode.game.OnlineGameScreen
 import com.vaibhav.presentation.online_mode.room.create_room.CreateNewRoomScreen
@@ -25,6 +26,7 @@ fun Navigation(
 ) {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentBackStackRoute = navBackStackEntry?.destination?.route
 
     NavHost(
         navController = navController,
@@ -95,13 +97,38 @@ fun Navigation(
                 }
             )
         ) {
-
-            val currentBackStackRoute = navBackStackEntry?.destination?.route
             val isOnlineGameScreenComposableVisible = currentBackStackRoute == it.destination.route
 
             OnlineGameScreen(
                 isBackHandleEnabled = isOnlineGameScreenComposableVisible,
+                scaffoldState = scaffoldState,
                 onNavigateUp = { navController.navigateUp() }
+            )
+        }
+
+        composable(
+            route = Screen.OfflineGameScreen.route + "?player1Name={player1Name}" + "?player2Name={player2Name}",
+            arguments = listOf(
+                navArgument("player1Name") {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = "Player1"
+                },
+                navArgument("player2Name") {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = "Player2"
+                }
+            )
+        ) {
+            val player1Name = it.arguments?.getString("player1Name")!!
+            val player2Name = it.arguments?.getString("player2Name")!!
+            val isOfflineGameScreenComposableVisible = currentBackStackRoute == it.destination.route
+            OfflineGameScreen(
+                onNavigateUp = { navController.popBackStack() },
+                isBackHandleEnabled = isOfflineGameScreenComposableVisible,
+                player1Name = player1Name,
+                player2Name = player2Name
             )
         }
     }

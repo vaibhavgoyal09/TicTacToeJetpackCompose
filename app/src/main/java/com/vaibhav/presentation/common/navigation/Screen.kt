@@ -13,4 +13,6 @@ sealed class Screen(val route: String) {
     object OnlineGameScreen: Screen("online_game_screen")
 
     object CreateNewRoomScreen: Screen("create_new_room_screen")
+
+    object OfflineGameScreen: Screen("offline_game_screen_route")
 }

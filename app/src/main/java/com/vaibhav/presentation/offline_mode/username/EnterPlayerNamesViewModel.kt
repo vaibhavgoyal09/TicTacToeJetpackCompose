@@ -4,7 +4,9 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vaibhav.presentation.common.navigation.Screen
 import com.vaibhav.presentation.common.util.StandardTextFieldState
+import com.vaibhav.presentation.common.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -20,8 +22,8 @@ class EnterPlayerNamesViewModel @Inject constructor() : ViewModel() {
     private val _player2NameState = mutableStateOf(StandardTextFieldState())
     val player2NameState: State<StandardTextFieldState> = _player2NameState
 
-    private val _userNameValidationEvent = MutableSharedFlow<EnterPlayerNamesValidationEvent>()
-    val userNameValidationEvent: SharedFlow<EnterPlayerNamesValidationEvent> = _userNameValidationEvent
+    private val _uiEvent = MutableSharedFlow<UiEvent>()
+    val uiEvent: SharedFlow<UiEvent> = _uiEvent
 
     fun onEvent(event: EnterPlayerNamesEvent) {
         when (event) {
@@ -40,12 +42,17 @@ class EnterPlayerNamesViewModel @Inject constructor() : ViewModel() {
                 val player2Name = _player2NameState.value.text
 
                 viewModelScope.launch {
-                    _userNameValidationEvent.emit(
-                        EnterPlayerNamesValidationEvent.Success(
-                            player1Name,
-                            player2Name
-                        )
-                    )
+                    val route: String = if (player1Name.isNotEmpty() && player2Name.isNotEmpty()) {
+                        Screen.OfflineGameScreen.route + "?player1Name=$player1Name" + "?player2Name=$player2Name"
+                    } else if (player1Name.isEmpty() && player2Name.isNotEmpty()) {
+                        Screen.OfflineGameScreen.route + "?player2Name=$player2Name"
+                    } else if (player1Name.isNotEmpty() && player2Name.isEmpty()) {
+                        Screen.OfflineGameScreen.route + "?player1Name=$player1Name"
+                    } else {
+                        Screen.OfflineGameScreen.route
+                    }
+
+                    _uiEvent.emit(UiEvent.Navigate(route))
                 }
             }
         }

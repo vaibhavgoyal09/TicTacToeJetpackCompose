@@ -1,9 +1,8 @@
-package com.vaibhav.presentation.online_mode.game
+package com.vaibhav.presentation.offline_mode.game
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,25 +12,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.vaibhav.presentation.common.components.ConfirmExitDialog
 import com.vaibhav.presentation.common.components.GameBoard
 import com.vaibhav.presentation.common.components.StandardScoreboard
-import kotlinx.coroutines.flow.collect
 
 @Composable
-fun OnlineGameScreen(
-    viewModel: OnlineGameViewModel = hiltViewModel(),
-    isBackHandleEnabled: Boolean = false,
-    scaffoldState: ScaffoldState,
-    onNavigateUp: () -> Unit
+fun OfflineGameScreen(
+    viewModel: OfflineGameViewModel = hiltViewModel(),
+    onNavigateUp: () -> Unit,
+    isBackHandleEnabled: Boolean,
+    player1Name: String,
+    player2Name: String
 ) {
 
-    LaunchedEffect(key1 = true) {
-        viewModel.uiEvent.collect { event ->
-            when(event) {
-                is OnlineGameUiEvent.ShowSnackBar -> {
-                    scaffoldState.snackbarHostState.showSnackbar(event.message)
-                }
-            }
-        }
-    }
+    val player1Score = viewModel.player1ScoreState.value
+    val player2Score = viewModel.player2ScoreState.value
 
     var showConfirmExitDialog by remember {
         mutableStateOf(false)
@@ -48,15 +40,11 @@ fun OnlineGameScreen(
         )
     }
 
-    val player1Name = viewModel.player1NameState.value
-    val player2Name = viewModel.player2NameState.value
-    val player1Score = viewModel.player1ScoreState.value
-    val player2Score = viewModel.player2ScoreState.value
-
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()

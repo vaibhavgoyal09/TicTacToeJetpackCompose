@@ -3,10 +3,13 @@ package com.vaibhav.core.networking
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.JsonParser
-import com.vaibhav.core.models.ws.BaseModel
-import com.vaibhav.core.models.ws.JoinRoom
+import com.vaibhav.core.models.ws.*
 import com.vaibhav.util.Constants.TIC_TAC_TOE_SOCKET_API_URL
+import com.vaibhav.util.Constants.TYPE_ANNOUNCEMENT
+import com.vaibhav.util.Constants.TYPE_GAME_ERROR
 import com.vaibhav.util.Constants.TYPE_JOIN_ROOM
+import com.vaibhav.util.Constants.TYPE_PHASE_CHANGE
+import com.vaibhav.util.Constants.TYPE_START_GAME
 import com.vaibhav.util.DispatcherProvider
 import io.ktor.client.*
 import io.ktor.client.features.websocket.*
@@ -18,7 +21,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.receiveAsFlow
 import javax.inject.Inject
-import kotlin.coroutines.cancellation.CancellationException
 
 class TicTacToeSocketApiImpl @Inject constructor(
     private val dispatchers: DispatcherProvider,
@@ -75,13 +77,7 @@ class TicTacToeSocketApiImpl @Inject constructor(
 
     override suspend fun sendMessage(baseModel: BaseModel) {
         val message = gson.toJson(baseModel)
-        Log.e("TicTacToeSocketApiImpl", message)
-        try {
-            webSocketSession?.send(Frame.Text(message))
-        } catch (e: Exception) {
-            e.printStackTrace()
-            socketConnectJob.cancel(CancellationException(cause = e))
-        }
+        webSocketSession?.send(Frame.Text(message))
     }
 
     private fun handleSocketError(throwable: Throwable) {
@@ -104,10 +100,16 @@ class TicTacToeSocketApiImpl @Inject constructor(
         webSocketSession?.incoming?.consumeEach { frame ->
             if (frame is Frame.Text) {
                 val message = frame.readText()
+                println(message)
+
                 val jsonObject = JsonParser.parseString(message).asJsonObject
 
                 val type = when (jsonObject.get("type").asString) {
                     TYPE_JOIN_ROOM -> JoinRoom::class.java
+                    TYPE_ANNOUNCEMENT -> Announcement::class.java
+                    TYPE_GAME_ERROR -> GameError::class.java
+                    TYPE_PHASE_CHANGE -> GamePhaseChange::class.java
+                    TYPE_START_GAME -> StartGame::class.java
                     else -> BaseModel::class.java
                 }
 
@@ -118,6 +120,6 @@ class TicTacToeSocketApiImpl @Inject constructor(
     }
 
     companion object {
-        private const val SOCKET_CONNECT_RETRY_INTERVAL = 3000L // 3 Seconds
+        private const val SOCKET_CONNECT_RETRY_INTERVAL = 5000L // 5 Seconds
     }
 }
