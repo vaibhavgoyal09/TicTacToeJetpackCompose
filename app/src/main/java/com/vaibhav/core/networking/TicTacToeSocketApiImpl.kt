@@ -6,10 +6,11 @@ import com.google.gson.JsonParser
 import com.vaibhav.core.models.ws.*
 import com.vaibhav.util.Constants.TIC_TAC_TOE_SOCKET_API_URL
 import com.vaibhav.util.Constants.TYPE_ANNOUNCEMENT
+import com.vaibhav.util.Constants.TYPE_GAME_BOARD_STATE_CHANGED
 import com.vaibhav.util.Constants.TYPE_GAME_ERROR
+import com.vaibhav.util.Constants.TYPE_GAME_RESULT
 import com.vaibhav.util.Constants.TYPE_JOIN_ROOM
 import com.vaibhav.util.Constants.TYPE_PHASE_CHANGE
-import com.vaibhav.util.Constants.TYPE_START_GAME
 import com.vaibhav.util.DispatcherProvider
 import io.ktor.client.*
 import io.ktor.client.features.websocket.*
@@ -60,7 +61,6 @@ class TicTacToeSocketApiImpl @Inject constructor(
         socketConnectJob = Job()
         CoroutineScope(dispatchers.io + socketConnectJob).launch(socketExceptionHandler) {
             supervisorScope {
-                println("trying to connect to web socket connection")
                 client.webSocket(urlString = TIC_TAC_TOE_SOCKET_API_URL) {
                     webSocketSession = this
 
@@ -109,7 +109,8 @@ class TicTacToeSocketApiImpl @Inject constructor(
                     TYPE_ANNOUNCEMENT -> Announcement::class.java
                     TYPE_GAME_ERROR -> GameError::class.java
                     TYPE_PHASE_CHANGE -> GamePhaseChange::class.java
-                    TYPE_START_GAME -> StartGame::class.java
+                    TYPE_GAME_BOARD_STATE_CHANGED -> GameBoardStateChange::class.java
+                    TYPE_GAME_RESULT -> GameResult::class.java
                     else -> BaseModel::class.java
                 }
 

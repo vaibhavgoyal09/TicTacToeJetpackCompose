@@ -14,9 +14,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
+import io.ktor.client.features.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.logging.*
 import io.ktor.client.features.websocket.*
+import io.ktor.client.request.*
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -27,26 +29,25 @@ object CoreModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(clientId: String): OkHttpClient {
+    fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .readTimeout(1, TimeUnit.MINUTES)
             .writeTimeout(1, TimeUnit.MINUTES)
-            .addInterceptor { chain ->
-                val url = chain.request().url.newBuilder()
-                    .addQueryParameter("client_id", clientId)
-                    .build()
-                val request = chain.request().newBuilder()
-                    .url(url)
-                    .build()
-                chain.proceed(request)
-            }
             .build()
     }
 
     @Singleton
     @Provides
-    fun provideHttpClient(okHttpClient: OkHttpClient): HttpClient {
+    fun provideHttpClient(
+        okHttpClient: OkHttpClient,
+        clientId: String
+    ): HttpClient {
         return HttpClient(OkHttp) {
+
+            defaultRequest {
+                parameter("clientId", clientId)
+            }
+
             engine {
                 preconfigured = okHttpClient
             }

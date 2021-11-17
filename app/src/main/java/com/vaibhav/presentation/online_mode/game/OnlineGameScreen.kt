@@ -2,6 +2,7 @@ package com.vaibhav.presentation.online_mode.game
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
@@ -13,8 +14,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.vaibhav.presentation.common.components.ConfirmExitDialog
 import com.vaibhav.presentation.common.components.GameBoard
 import com.vaibhav.presentation.common.components.StandardScoreboard
+import com.vaibhav.presentation.common.components.StandardSettingsIcon
 import kotlinx.coroutines.flow.collect
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun OnlineGameScreen(
     viewModel: OnlineGameViewModel = hiltViewModel(),
@@ -23,11 +26,25 @@ fun OnlineGameScreen(
     onNavigateUp: () -> Unit
 ) {
 
+    val boardState = viewModel.boardState.value
+
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when(event) {
                 is OnlineGameUiEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(event.message)
+                }
+                is OnlineGameUiEvent.ShowWinDialog -> {
+
+                }
+                is OnlineGameUiEvent.ShowLostDialog -> {
+
+                }
+                is OnlineGameUiEvent.ShowMatchDrawDialog -> {
+
+                }
+                is OnlineGameUiEvent.NavigateUp -> {
+                    onNavigateUp()
                 }
             }
         }
@@ -93,7 +110,20 @@ fun OnlineGameScreen(
 
         GameBoard(
             modifier = Modifier
-                .align(alignment = Alignment.Center)
-        )
+                .align(alignment = Alignment.Center),
+            gameState = boardState
+        ) {
+            viewModel.onEvent(OnlineGameEvent.GameMove(it))
+        }
+
+        Box(
+            modifier = Modifier
+                .padding(bottom = 40.dp)
+                .align(Alignment.BottomCenter)
+        ) {
+            StandardSettingsIcon(
+                modifier = Modifier.align(Alignment.Center)
+            )
+        }
     }
 }

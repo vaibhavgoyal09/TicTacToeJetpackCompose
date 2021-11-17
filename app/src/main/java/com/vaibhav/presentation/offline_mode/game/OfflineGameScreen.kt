@@ -14,6 +14,7 @@ import com.vaibhav.presentation.common.components.ConfirmExitDialog
 import com.vaibhav.presentation.common.components.GameBoard
 import com.vaibhav.presentation.common.components.StandardScoreboard
 import com.vaibhav.presentation.common.components.StandardSettingsIcon
+import kotlinx.coroutines.flow.collect
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -25,8 +26,23 @@ fun OfflineGameScreen(
     player2Name: String
 ) {
 
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is OfflineScreenUiEvent.ShowWinDialog -> {
+                    println("${event.winnerUserName} has won")
+                }
+                is OfflineScreenUiEvent.ShowMatchDrawDialog -> {
+                    println("match draw")
+                }
+            }
+        }
+    }
+
     val player1Score = viewModel.player1ScoreState.value
     val player2Score = viewModel.player2ScoreState.value
+
+    val boardPositionsList = viewModel.boardState.value
 
     var showConfirmExitDialog by remember {
         mutableStateOf(false)
@@ -84,8 +100,11 @@ fun OfflineGameScreen(
 
         GameBoard(
             modifier = Modifier
-                .align(alignment = Alignment.Center)
-        )
+                .align(alignment = Alignment.Center),
+            gameState = boardPositionsList
+        ) { position ->
+            viewModel.onEvent(OfflineGameEvent.GameMove(position))
+        }
 
         Box(
             modifier = Modifier
@@ -93,7 +112,7 @@ fun OfflineGameScreen(
                 .align(Alignment.BottomCenter)
         ) {
             StandardSettingsIcon(
-                modifier =  Modifier.align(Alignment.Center)
+                modifier = Modifier.align(Alignment.Center)
             )
         }
     }

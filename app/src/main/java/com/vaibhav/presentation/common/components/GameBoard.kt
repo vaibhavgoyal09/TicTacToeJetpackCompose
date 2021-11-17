@@ -26,7 +26,7 @@ import com.vaibhav.presentation.common.theme.GameBoardBackground
 @Composable
 fun GameBoard(
     modifier: Modifier = Modifier,
-    gameState: List<Int> = listOf(0, 2, 1, 0, 1, 0, 0, 0, 0),
+    gameState: List<Int> = listOf(0, 0, 0, 0, 0, 0, 0, 0, 0),
     onItemClick: (position: Int) -> Unit = {}
 ) {
     Card(

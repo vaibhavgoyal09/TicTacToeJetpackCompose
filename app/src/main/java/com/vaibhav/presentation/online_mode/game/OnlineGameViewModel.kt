@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vaibhav.core.models.Room
 import com.vaibhav.core.models.ws.*
 import com.vaibhav.core.networking.SocketEvent
 import com.vaibhav.core.networking.TicTacToeSocketApi
@@ -40,11 +41,26 @@ class OnlineGameViewModel @Inject constructor(
     private val _player2ScoreState = mutableStateOf(0)
     val player2ScoreState: State<Int> = _player2ScoreState
 
+    private val _boardState = mutableStateOf(listOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
+    val boardState: State<List<Int>> = _boardState
+
+    private var hasGameStarted = false
+    private var isGameEnded = false
+
     init {
         _player1NameState.value = savedStateHandle.get<String>("userName") ?: ""
         _player2NameState.value = savedStateHandle.get<String>("existingPlayerUserName") ?: ""
         observeSocketEvents()
         observeSocketMessages()
+    }
+
+    fun onEvent(event: OnlineGameEvent) {
+        when(event) {
+            is OnlineGameEvent.GameMove -> {
+                val gameMove = GameMove(event.position)
+                sendBaseModel(gameMove)
+            }
+        }
     }
 
     private fun observeSocketEvents() {
@@ -64,7 +80,7 @@ class OnlineGameViewModel @Inject constructor(
                         Log.d("Online Game view model", "web socket connection closed")
                     }
                     is SocketEvent.RetryingToConnect -> {
-                        println("Retrying to connect to web sockets")
+
                     }
                 }
             }
@@ -84,14 +100,20 @@ class OnlineGameViewModel @Inject constructor(
                             Announcement.TYPE_PLAYER_LEFT -> {
                                 _uiEvent.emit(OnlineGameUiEvent.ShowSnackBar("${baseModel.playerUserName} left the game."))
                             }
-                            Announcement.TYPE_PLAYER_WON -> {
-                                if (baseModel.playerUserName == savedStateHandle.get<String>("userName")) {
-                                    _uiEvent.emit(OnlineGameUiEvent.ShowWinDialog)
-                                } else {
-                                    _uiEvent.emit(OnlineGameUiEvent.ShowLostDialog)
-                                }
+                        }
+                    }
+                    is GameResult -> {
+                        when (baseModel.resultType) {
+                            GameResult.TYPE_PLAYER_LOST -> {
+                                isGameEnded = true
+                                _uiEvent.emit(OnlineGameUiEvent.ShowLostDialog)
                             }
-                            Announcement.TYPE_MATCH_DRAW -> {
+                            GameResult.TYPE_PLAYER_WON -> {
+                                isGameEnded = true
+                                _uiEvent.emit(OnlineGameUiEvent.ShowWinDialog)
+                            }
+                            GameResult.TYPE_MATCH_DRAW -> {
+                                isGameEnded = true
                                 _uiEvent.emit(OnlineGameUiEvent.ShowMatchDrawDialog)
                             }
                         }
@@ -108,10 +130,15 @@ class OnlineGameViewModel @Inject constructor(
                         }
                     }
                     is GamePhaseChange -> {
-
+                        when(baseModel.gamePhase) {
+                            Room.GamePhase.NEW_ROUND -> {
+                                hasGameStarted = true
+                            }
+                        }
                     }
-                    is StartGame -> {
 
+                    is GameBoardStateChange -> {
+                        _boardState.value = ArrayList(baseModel.state)
                     }
                 }
             }
@@ -122,10 +149,5 @@ class OnlineGameViewModel @Inject constructor(
         viewModelScope.launch(dispatchers.io) {
             socketApi.sendMessage(baseModel)
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        sendBaseModel(DisconnectRequest())
     }
 }
