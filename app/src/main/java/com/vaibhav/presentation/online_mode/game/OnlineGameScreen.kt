@@ -1,6 +1,7 @@
 package com.vaibhav.presentation.online_mode.game
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
@@ -9,8 +10,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.vaibhav.R
 import com.vaibhav.presentation.common.components.ConfirmExitDialog
 import com.vaibhav.presentation.common.components.GameBoard
 import com.vaibhav.presentation.common.components.StandardScoreboard
@@ -27,21 +31,23 @@ fun OnlineGameScreen(
 ) {
 
     val boardState = viewModel.boardState.value
+    val player1Symbol = viewModel.player1SymbolState.value
+    val player2Symbol = viewModel.player2SymbolState.value
 
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
-            when(event) {
+            when (event) {
                 is OnlineGameUiEvent.ShowSnackBar -> {
                     scaffoldState.snackbarHostState.showSnackbar(event.message)
                 }
                 is OnlineGameUiEvent.ShowWinDialog -> {
-
+                    scaffoldState.snackbarHostState.showSnackbar("You win")
                 }
                 is OnlineGameUiEvent.ShowLostDialog -> {
-
+                    scaffoldState.snackbarHostState.showSnackbar("You lost")
                 }
                 is OnlineGameUiEvent.ShowMatchDrawDialog -> {
-
+                    scaffoldState.snackbarHostState.showSnackbar("Match draw")
                 }
                 is OnlineGameUiEvent.NavigateUp -> {
                     onNavigateUp()
@@ -82,11 +88,21 @@ fun OnlineGameScreen(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = player1Name,
-                style = MaterialTheme.typography.body1,
-                color = MaterialTheme.colors.onBackground
-            )
+            Column(
+                modifier = Modifier.padding(8.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = player1Name,
+                    style = MaterialTheme.typography.body1,
+                    color = MaterialTheme.colors.onBackground
+                )
+
+                StandardPlayerSymbol(
+                    symbol = player1Symbol,
+                    contentDescription = "Player1 Symbol"
+                )
+            }
 
             Spacer(
                 modifier = Modifier.size(16.dp)
@@ -101,11 +117,21 @@ fun OnlineGameScreen(
                 modifier = Modifier.size(16.dp)
             )
 
-            Text(
-                text = player2Name,
-                style = MaterialTheme.typography.body1,
-                color = MaterialTheme.colors.onBackground
-            )
+            Column(
+                modifier = Modifier.padding(8.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = player2Name,
+                    style = MaterialTheme.typography.body1,
+                    color = MaterialTheme.colors.onBackground
+                )
+
+                StandardPlayerSymbol(
+                    symbol = player2Symbol,
+                    contentDescription = "Player2 Symbol"
+                )
+            }
         }
 
         GameBoard(
@@ -123,6 +149,24 @@ fun OnlineGameScreen(
         ) {
             StandardSettingsIcon(
                 modifier = Modifier.align(Alignment.Center)
+            )
+        }
+    }
+}
+
+@Composable
+fun StandardPlayerSymbol(
+    modifier: Modifier = Modifier,
+    symbol: Int,
+    contentDescription: String? = null
+) {
+    when (symbol) {
+        1 -> {
+            Image(
+                painter = painterResource(id = R.drawable.x),
+                contentDescription = contentDescription,
+                modifier = modifier.size(30.dp),
+                contentScale = ContentScale.Fit
             )
         }
     }

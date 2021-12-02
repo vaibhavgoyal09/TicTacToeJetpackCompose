@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.collect
 fun OfflineGameScreen(
     viewModel: OfflineGameViewModel = hiltViewModel(),
     onNavigateUp: () -> Unit,
+    scaffoldState: ScaffoldState,
     isBackHandleEnabled: Boolean,
     player1Name: String,
     player2Name: String
@@ -30,10 +32,10 @@ fun OfflineGameScreen(
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is OfflineScreenUiEvent.ShowWinDialog -> {
-                    println("${event.winnerUserName} has won")
+                    scaffoldState.snackbarHostState.showSnackbar("${event.winnerUserName} has won.")
                 }
                 is OfflineScreenUiEvent.ShowMatchDrawDialog -> {
-                    println("match draw")
+                    scaffoldState.snackbarHostState.showSnackbar("Match draw")
                 }
             }
         }

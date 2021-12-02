@@ -41,6 +41,12 @@ class OnlineGameViewModel @Inject constructor(
     private val _player2ScoreState = mutableStateOf(0)
     val player2ScoreState: State<Int> = _player2ScoreState
 
+    private val _player1SymbolState = mutableStateOf(NO_SYMBOL)
+    val player1SymbolState: State<Int> = _player1SymbolState
+
+    private val _player2SymbolState = mutableStateOf(NO_SYMBOL)
+    val player2SymbolState: State<Int> = _player2SymbolState
+
     private val _boardState = mutableStateOf(listOf(0, 0, 0, 0, 0, 0, 0, 0, 0))
     val boardState: State<List<Int>> = _boardState
 
@@ -57,6 +63,9 @@ class OnlineGameViewModel @Inject constructor(
     fun onEvent(event: OnlineGameEvent) {
         when(event) {
             is OnlineGameEvent.GameMove -> {
+                if (!hasGameStarted || isGameEnded) {
+                    return
+                }
                 val gameMove = GameMove(event.position)
                 sendBaseModel(gameMove)
             }
@@ -136,7 +145,15 @@ class OnlineGameViewModel @Inject constructor(
                             }
                         }
                     }
+                    is StartGame -> {
+                        hasGameStarted = true
+                        val player1UserName = player1NameState.value
+                        val player1Symbol: Int = if (baseModel.playerWithSymbolXUserName == player1UserName) SYMBOL_X else SYMBOL_O
+                        val player2Symbol: Int = if (player1Symbol == SYMBOL_O) SYMBOL_X else SYMBOL_O
 
+                        _player1SymbolState.value = player1Symbol
+                        _player2SymbolState.value = player2Symbol
+                    }
                     is GameBoardStateChange -> {
                         _boardState.value = ArrayList(baseModel.state)
                     }
@@ -149,5 +166,11 @@ class OnlineGameViewModel @Inject constructor(
         viewModelScope.launch(dispatchers.io) {
             socketApi.sendMessage(baseModel)
         }
+    }
+
+    companion object {
+        const val NO_SYMBOL = 0
+        const val SYMBOL_X = 1
+        const val SYMBOL_O = 2
     }
 }

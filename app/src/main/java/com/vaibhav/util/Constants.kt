@@ -17,4 +17,5 @@ object Constants {
     const val TYPE_GAME_MOVE = "TYPE_GAME_MOVE"
     const val TYPE_GAME_RESULT = "TYPE_GAME_RESULT"
     const val TYPE_GAME_BOARD_STATE_CHANGED = "TYPE_GAME_BOARD_STATE_CHANGED"
+    const val TYPE_START_GAME = "TYPE_START_GAME"
 }

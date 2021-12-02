@@ -20,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.vaibhav.R
 import com.vaibhav.presentation.common.components.StandardTextField
+import com.vaibhav.presentation.common.navigation.Screen
 import com.vaibhav.presentation.common.util.UiEvent
 import com.vaibhav.util.Constants
 import kotlinx.coroutines.flow.collectLatest
@@ -43,9 +44,12 @@ fun CreateNewRoomScreen(
                     )
                 }
                 is UiEvent.Navigate -> {
-                    navController.navigate(event.route)
+                    navController.navigate(event.route) {
+                        popUpTo(Screen.CreateNewRoomScreen.route) {
+                            inclusive = true
+                        }
+                    }
                 }
-                else -> Unit
             }
         }
     }

@@ -130,6 +130,7 @@ fun Navigation(
             val isOfflineGameScreenComposableVisible = currentBackStackRoute == it.destination.route
             OfflineGameScreen(
                 onNavigateUp = { navController.popBackStack() },
+                scaffoldState = scaffoldState,
                 isBackHandleEnabled = isOfflineGameScreenComposableVisible,
                 player1Name = player1Name,
                 player2Name = player2Name

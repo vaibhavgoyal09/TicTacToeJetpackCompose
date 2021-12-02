@@ -11,6 +11,7 @@ import com.vaibhav.util.Constants.TYPE_GAME_ERROR
 import com.vaibhav.util.Constants.TYPE_GAME_RESULT
 import com.vaibhav.util.Constants.TYPE_JOIN_ROOM
 import com.vaibhav.util.Constants.TYPE_PHASE_CHANGE
+import com.vaibhav.util.Constants.TYPE_START_GAME
 import com.vaibhav.util.DispatcherProvider
 import io.ktor.client.*
 import io.ktor.client.features.websocket.*
@@ -36,8 +37,6 @@ class TicTacToeSocketApiImpl @Inject constructor(
     private var webSocketSession: DefaultClientWebSocketSession? = null
 
     private lateinit var socketConnectJob: CompletableJob
-
-    private val socketConnectRetryJob: Job = Job()
 
     private val socketExceptionHandler = CoroutineExceptionHandler { _, exception ->
         handleSocketError(exception)
@@ -89,7 +88,7 @@ class TicTacToeSocketApiImpl @Inject constructor(
     }
 
     private fun retryToConnect() {
-        CoroutineScope(dispatchers.io + socketConnectRetryJob).launch {
+        CoroutineScope(dispatchers.io).launch {
             delay(SOCKET_CONNECT_RETRY_INTERVAL)
             _socketEventChannel.send(SocketEvent.RetryingToConnect)
             openConnection()
@@ -111,6 +110,7 @@ class TicTacToeSocketApiImpl @Inject constructor(
                     TYPE_PHASE_CHANGE -> GamePhaseChange::class.java
                     TYPE_GAME_BOARD_STATE_CHANGED -> GameBoardStateChange::class.java
                     TYPE_GAME_RESULT -> GameResult::class.java
+                    TYPE_START_GAME -> StartGame::class.java
                     else -> BaseModel::class.java
                 }
 
